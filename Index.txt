@@ -1,0 +1,3673 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Gestion des demandes des parties prenantes de l'ENET'Com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+
+// Liste des encadrants
+const encadrants = [
+    "Abbes Tarek", "Abdelkefi Zied", "Abdelmoula Chokri", "Achich Nasira", "Aloui Helmi",
+    "Aloulou Rahma", "Ammar Sonda", "Amouri Lobna", "Amous Ben Amor Ikram", "Amri Ali",
+    "Ayadi Moez", "Ayadi Raouia", "Ayadi Hadrich Rim", "Ayadi Marzouk Rim", "Ayedi Mariem",
+    "Bahloul Bassem", "Barhoumi Ahlem", "Becha Nihel", "Belguith Aymen", "Ben Amor Nidhal",
+    "Ben Aouan Najib", "Ben Ayed Mohamed Ali", "Ben Ayed Walid", "Ben Daoud Wided",
+    "Ben Hadj Khaled Amina", "Ben Hamed Bassem", "Ben Hassen Sonia", "Ben Messouad Zeineb",
+    "Ben Nasr Mounir", "Ben Said Tarek", "Ben Said Achwek", "Ben Salah Lassad", "Ben Salem Samir",
+    "Ben Slima Mohamed", "Blaiech Rabeb", "Bouchaala Lobna", "Boujelben Yassine", "Boujelben Helmi",
+    "Boujelben Abir", "Bradai Nourchene", "Chaabene Maher", "Chaabouni Sihem", "Chaari Fakher",
+    "Chaari Tarek", "Chaker Aloui Nadia", "Charfi Salma", "Charfi Nesrine", "Cheikhrouhou Omar",
+    "Dammak Taheni", "Daoud Dammak Houda", "Derbel Hajer", "Dhieb Youssef", "Elloumi Nesrine",
+    "Ellouze Hanen", "Ellouze Nebrasse", "Essafi Bassem", "Fakhfakh Ahmed", "Fakhfakh Mourad",
+    "Fakhfakh Nadim", "Fakhfakh Chaari Kawthar", "Feki Oussema", "Fourati Kallel Imen", "Frikha Mondher",
+    "Frikha Soulef", "Gargouri Amir", "Gassara Bilel", "Gassara Hela", "Ghariani Moez", "Ghorbel Mohamed",
+    "Ghorbel Agnès", "Ghorbel Leila", "Ghozzi Fahmi", "Ghrab Dhouha", "Guidara Rima", "Hached Rim",
+    "Hachicha Fatma", "Hadj Kacem Imed", "Hadj Kacem Bassem", "Hajji Soufien", "Hajji Massoud",
+    "Hakim Hela", "Hammami Amal", "Hanini Wasma", "Hentati Raida", "Hentati Manel", "Jabeur Karim",
+    "Jamoussi Kais", "Jarraya Aref", "Kallel Emna", "Kallel Fathi", "Kallel Abdelaziz", "Kallel Mohamed",
+    "Kammoun Kaouthar", "Kammoun Sourour", "Karray Mahmoud", "Kessentini Jihene", "Khalfallah Ali",
+    "Kharrat Maher", "Kharrat Mohamed", "Kharrat Wajdi", "Kharrat boujelben Manel", "Khemakhem Mahdi",
+    "Khrouf Kais", "Koobaa Mohamed", "Kossentini Nesrine", "Koubaa Hend", "Koubaa Mohamed", "Lahiani Houssem",
+    "Lajnef Hanen", "Louati Mahdi", "Louati Kammoun Kaouthar", "Loulou Imen", "Maatar Zouhour",
+    "Majdoubi Jihen", "Makhlouf Makram", "Makhloufi Achraf", "Makni Achraf", "Marouane Hend", "Marrakchi Sonia",
+    "Masmoudi Abdelkarim", "Masmoudi Mohamed Slim", "Masmoudi Wafa", "Masmoudi Anis", "Meddeb Makhlouf Amel",
+    "Medhioub Mouna", "Megdich Nadia", "Messaoud Amin", "Mliki Hazar", "Mnif Hassene", "Mnif Kais",
+    "Mnif Sami", "Mtibaa Achraf", "Neji Mohamed", "Om Heni Nouri", "Ouni Tarek", "Rekik Malek", "Rekik Neila",
+    "Rekik Molka", "Sahnoun Fakhfakh Salwa", "Samet Amine", "Sfaihi Zouari Imen", "Shabou Sonda",
+    "Smaoui Ikram", "Smaoui Salima", "Smaoui Souhail", "Taouil Khaled", "Tounsi Souhir", "Trabelsi Ala Din",
+    "Trigui Omar", "Triki Moncef", "Yaich Mohamed", "Zaafrane Habiba", "Zarai Faouzi", "Zghal Rim", "Zouari Ramzi", "Zouch Wassim"
+];
+
+// Définir les dates d’ouverture/fermeture une seule fois (variables globales)
+const materielsStartDate = new Date("2026-04-03T00:00:00");  // ouverture
+const materielsEndDate   = new Date("2026-04-03T23:59:59");  // fermeture
+
+// Fonction pour filtrer la liste des encadrants
+function filterEncadrantList(inputId, listId) {
+    const input = document.getElementById(inputId);
+    const filter = input.value.toUpperCase();
+    const list = document.getElementById(listId);
+
+    // Vider la liste
+    list.innerHTML = '';
+
+    if (filter) {
+        // Filtrer les encadrants
+        const filteredEncadrants = encadrants.filter(encadrant =>
+            encadrant.toUpperCase().includes(filter)
+        );
+
+        // Afficher la liste seulement si elle n'est pas vide
+        if (filteredEncadrants.length > 0) {
+            list.style.display = 'block';
+
+            // Ajouter les options filtrées
+            filteredEncadrants.forEach(encadrant => {
+                const option = document.createElement('option');
+                option.value = encadrant;
+                option.textContent = encadrant;
+                list.appendChild(option);
+            });
+        } else {
+            list.style.display = 'none';
+        }
+    } else {
+        // Masquer la liste si le champ de saisie est vide
+        list.style.display = 'none';
+    }
+}
+
+// Fonction pour sélectionner un encadrant
+function selectEncadrant(inputId, listId) {
+    const input = document.getElementById(inputId);
+    const list = document.getElementById(listId);
+
+    if (list.selectedIndex !== -1) {
+        input.value = list.options[list.selectedIndex].value;
+        list.style.display = 'none';
+    }
+}
+
+      let isCertificationMicrosoftActive = false;
+      let isFormValid = true;
+      let isPrintButtonClicked = false;
+
+// Fonction pour réinitialiser le tableau
+function resetTable(tableId) {
+    const table = document.getElementById(tableId);
+    const tbody = table.getElementsByTagName('tbody')[0];
+
+    // Supprimer toutes les lignes sauf la première
+    while (tbody.rows.length > 1) {
+        tbody.deleteRow(1);
+    }
+
+    // Réinitialiser les champs de la première ligne
+    const firstRow = tbody.rows[0];
+    const inputs = firstRow.getElementsByTagName('input');
+    inputs[0].value = ''; // Réinitialiser le champ "Qté"
+    inputs[1].value = ''; // Réinitialiser le champ "Désignation"
+}
+
+// Fonction pour réinitialiser le champ de fichier joint
+function resetFileInput() {
+    const fileInput = document.getElementById('fichierJoint');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const pdfError = document.getElementById('pdfError');
+
+    // Réinitialiser le champ de fichier
+    fileInput.value = '';
+    fileNameDisplay.textContent = 'Aucun fichier sélectionné';
+    pdfError.style.display = 'none';
+    dropZoneText.style.display = 'block';
+}
+
+// Gestion de l'affichage des pages
+function showPage(pageId) {
+    const pages = ['mainFormPage', 'servicePage'];
+    pages.forEach(page => {
+        document.getElementById(page).style.display = page === pageId ? 'block' : 'none';
+    });
+
+    // Réactiver le formulaire si on revient à la première page
+    if (pageId === 'mainFormPage') {
+        enableForm();
+        hideErrorMessages(); // Masquer les messages d'erreur
+    }
+
+    // Mettre à jour les services disponibles lors de l'affichage de la page service
+    if (pageId === 'servicePage') {
+        updateServiceOptions();
+        // Désactiver le bouton "Soumettre" par défaut
+        document.querySelector('#serviceForm input[type="submit"]').disabled = true;
+
+        // Réinitialiser le tableau des matériels
+        const fonction = window.formData.fonction;
+        const tableId = fonction === 'Étudiant' ? 'materielsTableEtudiant' : 'materielsTableEnseignant';
+        resetTable(tableId);
+
+        // Réinitialiser le champ de fichier joint
+        resetFileInput();
+    }
+}
+
+function updateServiceOptions() {
+  const fonction = document.getElementById('fonction').value;
+  const typeServiceSelect = document.getElementById('typeService');
+  // Vider d'abord la liste
+  typeServiceSelect.innerHTML = '<option value=""></option>';
+
+  if (fonction === 'Étudiant') {
+    const services = [
+      'Compte institutionnel',
+      'Demande de matériels',
+      'Dépôt final – PFE et Thèse',
+      'Demande d\'activité estudiantine',
+      'Certification Microsoft'
+    ];
+    services.forEach(service => {
+      const option = document.createElement('option');
+      option.value = service;
+      option.textContent = service;
+      typeServiceSelect.appendChild(option);
+    });
+  } else if (fonction === 'Enseignant' || fonction === 'Administratif') {
+    const services = [
+      'Compte institutionnel',
+      'Demande d\'intervention',
+      'Demande de matériels',
+      'Certification Microsoft'
+    ];
+    services.forEach(service => {
+      const option = document.createElement('option');
+      option.value = service;
+      option.textContent = service;
+
+      // Si c'est "Demande de matériels" → vérifier la période
+      if (service === 'Demande de matériels') {
+        const now = new Date();
+        if (!(now >= materielsStartDate && now <= materielsEndDate)) {
+          option.disabled = true;
+          option.textContent += ' (Inaccessible)';
+        }
+      }
+
+      typeServiceSelect.appendChild(option);
+    });
+  }
+
+  // Appliquer l'état préchargé de "Certification Microsoft"
+  const certificationOption = typeServiceSelect.querySelector('option[value="Certification Microsoft"]');
+  if (certificationOption) {
+    certificationOption.disabled = !isCertificationMicrosoftActive;
+    if (!isCertificationMicrosoftActive) {
+      certificationOption.textContent += ' (Inaccessible)';
+    }
+  }
+}
+
+        function onNationaliteChange() {
+            resetNationaliteFields(); // Réinitialiser les champs avant de montrer les nouveaux
+
+            const nationalite = document.getElementById('nationalite').value;
+            const cinDiv = document.getElementById('cinDiv');
+            const codeMinistereDiv = document.getElementById('codeMinistereDiv');
+
+            if (nationalite === 'Tunisienne') {
+                cinDiv.style.display = 'block';
+                codeMinistereDiv.style.display = 'none';
+                document.getElementById('cin').required = true;
+                document.getElementById('codeMinistere').required = false;
+            } else if (nationalite === 'Étrangère') {
+                cinDiv.style.display = 'none';
+                codeMinistereDiv.style.display = 'block';
+                document.getElementById('cin').required = false;
+                document.getElementById('codeMinistere').required = true;
+            } else {
+                cinDiv.style.display = 'none';
+                codeMinistereDiv.style.display = 'none';
+                document.getElementById('cin').required = false;
+                document.getElementById('codeMinistere').required = false;
+            }
+            validateForm();
+        }
+function onFonctionChange() {
+    hideErrorMessages(); // Masquer les messages d'erreur
+    resetFonctionFields(); // Réinitialiser les champs avant de montrer les nouveaux
+
+    const fonction = document.getElementById('fonction').value;
+    const etudiantFields = document.getElementById('etudiantFields');
+    const enseignantFields = document.getElementById('enseignantFields');
+    const loginForm = document.getElementById('loginForm');
+    const email = document.getElementById('email').value;
+
+    if (fonction === 'Étudiant') {
+        etudiantFields.style.display = 'block';
+        enseignantFields.style.display = 'none';
+        loginForm.style.display = 'none';
+    } else if (fonction === 'Enseignant') {
+        etudiantFields.style.display = 'none';
+        if (isValidEnseignantEmail(email)) {
+            enseignantFields.style.display = 'block';
+            loginForm.style.display = 'none';
+        } else {
+            enseignantFields.style.display = 'none';
+            loginForm.style.display = 'block';
+        }
+    } else {
+        etudiantFields.style.display = 'none';
+        enseignantFields.style.display = 'none';
+        loginForm.style.display = 'none';
+    }
+
+    // Vider le champ mot de passe
+    document.getElementById('password').value = '';
+
+    // Masquer le message d'assistance pour mot de passe
+    document.getElementById('emailSentMessage').style.display = 'none';
+
+    validateForm();
+}
+
+function validatePassword() {
+    const password = document.getElementById('password').value;
+    const loginMessage = document.getElementById('loginMessage');
+    const email = document.getElementById('email').value;
+
+    if (password === 'enetcom@ens' || isValidEnseignantEmail(email)) {
+        loginMessage.style.display = 'none';
+        document.getElementById('enseignantFields').style.display = 'block';
+        document.getElementById('loginForm').style.display = 'none';
+    } else {
+        loginMessage.style.display = 'block';
+    }
+}
+
+function hideErrorMessages() {
+    document.getElementById('emailRequiredMessage').style.display = 'none';
+    document.getElementById('loginMessage').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Ajoutez des écouteurs d'événements à tous les champs du formulaire
+    const formFields = document.querySelectorAll('#serviceForm input, #serviceForm select, #serviceForm textarea');
+    formFields.forEach(field => {
+        field.addEventListener('change', validateServiceForm);
+        field.addEventListener('input', validateServiceForm);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const keywordsFields = ['motsCles', 'keywords'];
+
+    keywordsFields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+
+        if (field) {
+            // Empêcher la saisie d'espaces au début
+            field.addEventListener('keydown', function(event) {
+                if (event.key === ' ' && this.selectionStart === 0) {
+                    event.preventDefault();
+                }
+                // Empêcher la saisie de plus d'un espace successif
+                if (event.key === ' ' && this.value[this.selectionStart - 1] === ' ') {
+                    event.preventDefault();
+                }
+            });
+
+            // Ajouter un espace après une virgule et capitaliser le mot suivant
+            field.addEventListener('input', function() {
+                let value = this.value;
+
+                // Capitaliser la première lettre du champ
+                if (value.length > 0 && value[0] !== ' ') {
+                    value = value.charAt(0).toUpperCase() + value.slice(1);
+                }
+
+                // Remplacer les virgules non suivies d'un espace par une virgule suivie d'un espace
+                value = value.replace(/,\S/g, ', ');
+
+                // Capitaliser le premier caractère après chaque virgule
+                value = value.replace(/, (\w)/g, function(match, p1) {
+                    return ', ' + p1.toUpperCase();
+                });
+
+                this.value = value;
+            });
+
+            // Supprimer les virgules et espaces à la fin
+            field.addEventListener('blur', function() {
+                let value = this.value.trim();
+                // Supprimer les virgules et espaces à la fin
+                value = value.replace(/,\s*$/, '');
+                this.value = value;
+            });
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Écouteurs pour les champs de "Demande de matériels" (Enseignant/Administratif)
+    const categorieSelect = document.getElementById('categorie');
+    const justificationSelect = document.getElementById('justification');
+    const precisezJustificationInput = document.getElementById('precisezJustification');
+
+    if (categorieSelect) {
+        categorieSelect.addEventListener('change', validateServiceForm);
+    }
+    if (justificationSelect) {
+        justificationSelect.addEventListener('change', validateServiceForm);
+    }
+    if (precisezJustificationInput) {
+        precisezJustificationInput.addEventListener('input', validateServiceForm);
+    }
+
+    // Écouteurs pour les champs du tableau des matériels
+    const materielsTable = document.getElementById('materielsTableEnseignant');
+    if (materielsTable) {
+        materielsTable.addEventListener('input', validateServiceForm);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fields = ['nomSociete', 'titreProjet', 'projectTitle'];
+
+    fields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+
+        if (field) {
+            // Empêcher la saisie d'espaces au début
+            field.addEventListener('keydown', function(event) {
+                if (event.key === ' ' && this.selectionStart === 0) {
+                    event.preventDefault();
+                }
+            });
+
+            // Remplacer les espaces multiples par un seul espace et convertir uniquement la première lettre du premier mot en majuscule
+            field.addEventListener('input', function() {
+                let value = this.value.trimStart(); // Supprimer les espaces au début
+                value = value.replace(/\s+/g, ' '); // Remplacer les espaces multiples par un seul espace
+
+                // Convertir uniquement la première lettre du premier mot en majuscule
+                if (value.length > 0) {
+                    value = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+                }
+
+                this.value = value;
+            });
+
+            // Supprimer les espaces à la fin du champ
+            field.addEventListener('blur', function() {
+                this.value = this.value.trimEnd();
+            });
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const binomeEmailInput = document.getElementById('binomeEmail');
+    const binomeEmailError = document.getElementById('binomeEmailError');
+
+    if (binomeEmailInput) {
+        binomeEmailInput.addEventListener('input', function(event) {
+            // Convertir toutes les lettres en minuscules
+            binomeEmailInput.value = binomeEmailInput.value.toLowerCase();
+
+            // Empêcher la saisie de l'espace
+            if (event.inputType === 'insertText' && event.data === ' ') {
+                binomeEmailInput.value = binomeEmailInput.value.replace(/\s+/g, '');
+            }
+
+            // Masquer le message d'erreur si le champ devient valide
+            if (!binomeEmailInput.validity.typeMismatch && binomeEmailInput.value.trim() !== '') {
+                binomeEmailError.style.display = 'none';
+            }
+        });
+
+        binomeEmailInput.addEventListener('blur', function() {
+            // Valider l'email lorsque le champ perd le focus
+            if (binomeEmailInput.validity.typeMismatch || binomeEmailInput.value.trim() === '') {
+                binomeEmailError.style.display = 'block';
+            } else {
+                binomeEmailError.style.display = 'none';
+            }
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('password');
+    if (passwordField) {
+        passwordField.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Empêche le comportement par défaut de la touche Entrée
+                validatePassword(); // Appelle la fonction de validation du mot de passe
+            }
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('input', function() {
+        const fonction = document.getElementById('fonction').value;
+        if (fonction === 'Enseignant' && isValidEnseignantEmail(emailInput.value)) {
+            document.getElementById('enseignantFields').style.display = 'block';
+            document.getElementById('loginForm').style.display = 'none';
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const emailRequiredMessage = document.getElementById('emailRequiredMessage');
+            emailRequiredMessage.style.display = 'none'; // Masquer le message dès que l'utilisateur commence à saisir le mot de passe
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Ajoutez l'écouteur d'événement pour "Travail en binôme"
+    const travailEnBinomeSelect = document.getElementById('travailEnBinome');
+    if (travailEnBinomeSelect) {
+        travailEnBinomeSelect.addEventListener('change', onTravailEnBinomeChange);
+    }
+
+    // Ajoutez les écouteurs d'événements pour les champs du binôme
+    const binomeNationaliteSelect = document.getElementById('binomeNationalite');
+    if (binomeNationaliteSelect) {
+        binomeNationaliteSelect.addEventListener('change', onBinomeNationaliteChange);
+    }
+
+    const binomeFormationSelect = document.getElementById('binomeFormation');
+    if (binomeFormationSelect) {
+        binomeFormationSelect.addEventListener('change', onBinomeFormationChange);
+    }
+});
+
+function filterEncadrantList(inputId, listId) {
+    const input = document.getElementById(inputId);
+    const filter = input.value.toUpperCase();
+    const list = document.getElementById(listId);
+
+    // Vider la liste
+    list.innerHTML = '';
+
+    // Récupérer les encadrants déjà sélectionnés
+    const selectedEncadrants = [
+        document.getElementById('encadrant1Input')?.value,
+        document.getElementById('encadrant2Input')?.value,
+        document.getElementById('encadrant3Input')?.value
+    ].filter(val => val && val.trim() !== '' && val !== input.value); // Exclure la valeur courante
+
+    if (filter) {
+        // Filtrer les encadrants
+        const filteredEncadrants = encadrants.filter(encadrant =>
+            encadrant.toUpperCase().includes(filter) &&
+            !selectedEncadrants.includes(encadrant) // Exclure les déjà choisis
+        );
+
+        // Afficher la liste seulement si elle n'est pas vide
+        if (filteredEncadrants.length > 0) {
+            list.style.display = 'block';
+
+            // Ajouter les options filtrées
+            filteredEncadrants.forEach(encadrant => {
+                const option = document.createElement('option');
+                option.value = encadrant;
+                option.textContent = encadrant;
+                list.appendChild(option);
+            });
+        } else {
+            list.style.display = 'none';
+        }
+    } else {
+        list.style.display = 'none';
+    }
+}
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const emailRequiredMessage = document.getElementById('emailRequiredMessage');
+    const emailSentMessage = document.getElementById('emailSentMessage');
+    const loginMessage = document.getElementById('loginMessage');
+    const resetButton = document.querySelector('button[onclick="sendResetPasswordEmail()"]');
+    const loginForm = document.getElementById('loginForm');
+    const enseignantFields = document.getElementById('enseignantFields');
+    const fonctionSelect = document.getElementById('fonction');
+
+    // Masquer le message d'erreur d'e-mail lorsque l'utilisateur saisit du texte
+    emailInput.addEventListener('input', function() {
+      emailRequiredMessage.style.display = 'none';
+      emailSentMessage.style.display = 'none';
+    });
+
+document.getElementById('nom').addEventListener('input', function() {
+    document.getElementById('nomErrorMessage').style.display = 'none';
+});
+
+document.getElementById('prenom').addEventListener('input', function() {
+    document.getElementById('prenomErrorMessage').style.display = 'none';
+});
+
+document.getElementById('telephone').addEventListener('input', function() {
+    document.getElementById('telephoneErrorMessage').style.display = 'none';
+});
+
+    // Masquer le message d'erreur de mot de passe lorsque l'utilisateur saisit du texte
+    passwordInput.addEventListener('input', function() {
+      loginMessage.style.display = 'none';
+      emailSentMessage.style.display = 'none';
+    });
+
+    emailInput.addEventListener('input', function() {
+        const fonction = fonctionSelect.value;
+        if (fonction === 'Enseignant' && !isValidEnseignantEmail(emailInput.value)) {
+            // Réinitialiser le formulaire pour demander le mot de passe
+            enseignantFields.style.display = 'none';
+            loginForm.style.display = 'block';
+            passwordInput.value = ''; // Vider le champ mot de passe
+        }
+    });
+
+    fonctionSelect.addEventListener('change', function() {
+        const fonction = fonctionSelect.value;
+        if (fonction === 'Enseignant' && isValidEnseignantEmail(emailInput.value)) {
+            loginForm.style.display = 'none';
+            enseignantFields.style.display = 'block';
+        } else if (fonction === 'Enseignant') {
+            loginForm.style.display = 'block';
+            enseignantFields.style.display = 'none';
+        } else {
+            loginForm.style.display = 'none';
+            enseignantFields.style.display = 'none';
+        }
+    });    
+  });
+
+function sendResetPasswordEmail() {
+    const email = document.getElementById('email').value;
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const telephone = document.getElementById('telephone').value;
+    const fonction = document.getElementById('fonction').value;
+    const resetButton = document.querySelector('button[onclick="sendResetPasswordEmail()"]');
+
+    // Masquer le message "Mot de passe incorrect."
+    document.getElementById('loginMessage').style.display = 'none';
+
+    if (email && nom && prenom && telephone && fonction) {
+        resetButton.disabled = true; // Désactiver le bouton immédiatement après le clic
+        google.script.run.withSuccessHandler(() => {
+            document.getElementById('emailSentMessage').style.display = 'block';
+            document.getElementById('emailErrorMessage').style.display = 'none';
+            document.getElementById('emailRequiredMessage').style.display = 'none';
+            document.getElementById('nomErrorMessage').style.display = 'none';
+            document.getElementById('prenomErrorMessage').style.display = 'none';
+            document.getElementById('telephoneErrorMessage').style.display = 'none';
+        }).withFailureHandler((error) => {
+            document.getElementById('emailErrorText').textContent = error.message;
+            document.getElementById('emailErrorMessage').style.display = 'block';
+            document.getElementById('emailSentMessage').style.display = 'none';
+            document.getElementById('nomErrorMessage').style.display = 'none';
+            document.getElementById('prenomErrorMessage').style.display = 'none';
+            document.getElementById('telephoneErrorMessage').style.display = 'none';
+            resetButton.disabled = false; // Réactiver le bouton en cas d'échec
+        }).sendResetPasswordEmail(email, nom, prenom, telephone, fonction);
+    } else {
+        if (!nom) {
+            document.getElementById('nomErrorMessage').style.display = 'block';
+        }
+        if (!prenom) {
+            document.getElementById('prenomErrorMessage').style.display = 'block';
+        }
+        if (!telephone) {
+            document.getElementById('telephoneErrorMessage').style.display = 'block';
+        }
+        if (!fonction) {
+            document.getElementById('fonctionErrorMessage').style.display = 'block';
+        }
+        if (!email) {
+            document.getElementById('emailRequiredMessage').style.display = 'block';
+        }
+    }
+}
+
+function isValidEnseignantEmail(email) {
+    const regex = /^[a-zA-Z]+\.[a-zA-Z]+@enetcom\.usf\.tn$/;
+    return regex.test(email);
+}
+
+function onFormationChange() {
+    const formation = document.getElementById('formation').value;
+    const niveauSelect = document.getElementById('niveau');
+    const filiereSelect = document.getElementById('filiere');
+
+    // Vider d'abord la liste de niveau
+    niveauSelect.innerHTML = '<option value=""></option>';
+
+    // Ajouter les options en fonction de la formation
+    if (formation === 'Ingénieur' || formation === 'Licence Unifiée') {
+        ['1', '2', '3'].forEach(niveau => {
+            const option = document.createElement('option');
+            option.value = niveau;
+            option.textContent = niveau;
+            niveauSelect.appendChild(option);
+        });
+    } else if (formation === 'Mastère') {
+        ['1', '2'].forEach(niveau => {
+            const option = document.createElement('option');
+            option.value = niveau;
+            option.textContent = niveau;
+            niveauSelect.appendChild(option);
+        });
+    } else if (formation === 'Doctorat en STIC') {
+        ['1', '2', '3', '4', '5'].forEach(niveau => {
+            const option = document.createElement('option');
+            option.value = niveau;
+            option.textContent = niveau;
+            niveauSelect.appendChild(option);
+        });
+    }
+
+    // Vider d'abord la liste de filière
+    filiereSelect.innerHTML = '<option value=""></option>';
+
+    // Ajouter les options en fonction de la formation
+    if (formation === 'Ingénieur') {
+        ['IDSD', 'GT', 'GII', 'GEC'].forEach(filiere => {
+            const option = document.createElement('option');
+            option.value = filiere;
+            option.textContent = filiere;
+            filiereSelect.appendChild(option);
+        });
+    } else if (formation === 'Licence Unifiée') {
+        const option = document.createElement('option');
+        option.value = 'LTIC';
+        option.textContent = 'LTIC';
+        filiereSelect.appendChild(option);
+    } else if (formation === 'Mastère') {
+        ['MR', 'MP (Formation initiale)', 'MP (Formation continue)'].forEach(filiere => {
+            const option = document.createElement('option');
+            option.value = filiere;
+            option.textContent = filiere;
+            filiereSelect.appendChild(option);
+        });
+    } else if (formation === 'Doctorat en STIC') {
+        const option = document.createElement('option');
+        option.value = 'Doctorat';
+        option.textContent = 'Doctorat';
+        filiereSelect.appendChild(option);
+    }
+}
+
+function onNombreEncadrantsChange() {
+  const nombreEncadrants = document.getElementById('nombreEncadrants').value;
+  const encadrant1Div = document.getElementById('encadrant1Div');
+  const encadrant2Div = document.getElementById('encadrant2Div');
+  const encadrant3Div = document.getElementById('encadrant3Div');
+
+  // Masquer tous les champs d'encadrants
+  encadrant1Div.style.display = 'none';
+  encadrant2Div.style.display = 'none';
+  encadrant3Div.style.display = 'none';
+
+  // Afficher les champs en fonction du nombre d'encadrants sélectionné
+  if (nombreEncadrants === '1') {
+    encadrant1Div.style.display = 'block';
+  } else if (nombreEncadrants === '2') {
+    encadrant1Div.style.display = 'block';
+    encadrant2Div.style.display = 'block';
+  } else if (nombreEncadrants === '3') {
+    encadrant1Div.style.display = 'block';
+    encadrant2Div.style.display = 'block';
+    encadrant3Div.style.display = 'block';
+  }
+}
+
+function onLangueProjetChange() {
+    const langueProjet = document.getElementById('langueProjet').value;
+    const champsFrancais = document.getElementById('champsFrancais');
+    const champsAnglais = document.getElementById('champsAnglais');
+
+    // Masquer tous les champs
+    champsFrancais.style.display = 'none';
+    champsAnglais.style.display = 'none';
+
+    // Afficher les champs en fonction de la langue sélectionnée
+    if (langueProjet === 'Français') {
+        champsFrancais.style.display = 'block';
+    } else if (langueProjet === 'Anglais') {
+        champsAnglais.style.display = 'block';
+    }
+}
+
+function onBinomeNationaliteChange() {
+    resetBinomeNationaliteFields(); // Réinitialiser les champs avant de montrer les nouveaux
+
+    const nationalite = document.getElementById('binomeNationalite').value;
+    const cinDiv = document.getElementById('binomeCinDiv');
+    const codeMinistereDiv = document.getElementById('binomeCodeMinistereDiv');
+
+    if (nationalite === 'Tunisienne') {
+        cinDiv.style.display = 'block';
+        codeMinistereDiv.style.display = 'none';
+        document.getElementById('binomeCin').required = true;
+        document.getElementById('binomeCodeMinistere').required = false;
+    } else if (nationalite === 'Étrangère') {
+        cinDiv.style.display = 'none';
+        codeMinistereDiv.style.display = 'block';
+        document.getElementById('binomeCin').required = false;
+        document.getElementById('binomeCodeMinistere').required = true;
+    } else {
+        cinDiv.style.display = 'none';
+        codeMinistereDiv.style.display = 'none';
+        document.getElementById('binomeCin').required = false;
+        document.getElementById('binomeCodeMinistere').required = false;
+    }
+    validateForm();
+}
+
+function onBinomeFormationChange() {
+    const formation = document.getElementById('binomeFormation').value;
+    const niveauSelect = document.getElementById('binomeNiveau');
+    const filiereSelect = document.getElementById('binomeFiliere');
+
+    // Vider d'abord la liste de niveau
+    niveauSelect.innerHTML = '<option value=""></option>';
+
+    // Ajouter les options en fonction de la formation
+    if (formation === 'Ingénieur' || formation === 'Licence Unifiée') {
+        ['1', '2', '3'].forEach(niveau => {
+            const option = document.createElement('option');
+            option.value = niveau;
+            option.textContent = niveau;
+            niveauSelect.appendChild(option);
+        });
+    } else if (formation === 'Mastère') {
+        ['1', '2'].forEach(niveau => {
+            const option = document.createElement('option');
+            option.value = niveau;
+            option.textContent = niveau;
+            niveauSelect.appendChild(option);
+        });
+    } else if (formation === 'Doctorat en STIC') {
+        ['1', '2', '3', '4', '5'].forEach(niveau => {
+            const option = document.createElement('option');
+            option.value = niveau;
+            option.textContent = niveau;
+            niveauSelect.appendChild(option);
+        });
+    }
+
+    // Vider d'abord la liste de filière
+    filiereSelect.innerHTML = '<option value=""></option>';
+
+    // Ajouter les options en fonction de la formation
+    if (formation === 'Ingénieur') {
+        ['IDSD', 'GT', 'GII', 'GEC'].forEach(filiere => {
+            const option = document.createElement('option');
+            option.value = filiere;
+            option.textContent = filiere;
+            filiereSelect.appendChild(option);
+        });
+    } else if (formation === 'Licence Unifiée') {
+        const option = document.createElement('option');
+        option.value = 'LTIC';
+        option.textContent = 'LTIC';
+        filiereSelect.appendChild(option);
+    } else if (formation === 'Mastère') {
+        ['MR', 'MP (Formation initiale)', 'MP (Formation continue)'].forEach(filiere => {
+            const option = document.createElement('option');
+            option.value = filiere;
+            option.textContent = filiere;
+            filiereSelect.appendChild(option);
+        });
+    } else if (formation === 'Doctorat en STIC') {
+        const option = document.createElement('option');
+        option.value = 'Doctorat';
+        option.textContent = 'Doctorat';
+        filiereSelect.appendChild(option);
+    }
+}
+
+function resetBinomeNationaliteFields() {
+    // Réinitialiser les champs associés à la nationalité du binôme
+    document.getElementById('binomeCin').value = '';
+    document.getElementById('binomeCodeMinistere').value = '';
+    document.getElementById('binomeCinDiv').style.display = 'none';
+    document.getElementById('binomeCodeMinistereDiv').style.display = 'none';
+    document.getElementById('binomeCinError').style.display = 'none';
+    document.getElementById('binomeCodeMinistereError').style.display = 'none';
+}
+
+function onTravailEnBinomeChange() {
+    const travailEnBinome = document.getElementById('travailEnBinome').value;
+    const binomeFields = document.getElementById('binomeFields');
+
+    if (travailEnBinome === 'Oui') {
+        binomeFields.style.display = 'block';
+
+        // Ajouter les gestionnaires d'événements pour les champs de binôme
+        document.getElementById('binomeCin').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
+            if (this.value.length === 8) {
+                document.getElementById('binomeCinError').style.display = 'none';
+            }
+        });
+
+        document.getElementById('binomeCin').addEventListener('blur', function(e) {
+            if (this.value.length < 8) {
+                document.getElementById('binomeCinError').style.display = 'block';
+            }
+        });
+
+        document.getElementById('binomeCodeMinistere').addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
+            if (this.value.length === 8) {
+                document.getElementById('binomeCodeMinistereError').style.display = 'none';
+            }
+        });
+
+        document.getElementById('binomeCodeMinistere').addEventListener('blur', function(e) {
+            if (this.value.length < 8) {
+                document.getElementById('binomeCodeMinistereError').style.display = 'block';
+            }
+        });
+
+        // Ajouter le gestionnaire d'événements pour le champ "Téléphone"
+        document.getElementById('binomeTelephone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+            if (this.value.length > 8) {
+                this.value = this.value.slice(0, 8);
+            }
+            if (this.value.length === 8) {
+                document.getElementById('binomeTelephoneError').style.display = 'none';
+            }
+        });
+
+        document.getElementById('binomeTelephone').addEventListener('blur', function(e) {
+            if (this.value.length < 8) {
+                document.getElementById('binomeTelephoneError').style.display = 'block';
+            }
+        });
+    } else {
+        binomeFields.style.display = 'none';
+    }
+}
+
+      function submitForm() {
+        // Collecter les données du formulaire
+        const formData = new FormData(document.getElementById('mainForm'));
+
+        // Convertir les données en objet
+        const data = {};
+        formData.forEach((value, key) => {
+          data[key] = value;
+        });
+
+        // Sauvegarder les données dans une variable globale pour la page suivante
+        window.formData = data;
+
+        // Afficher la page de service
+        showPage('servicePage');
+      }
+
+function disableSubmitButton() {
+  const submitButton = document.querySelector('#serviceForm input[type="submit"]');
+  submitButton.disabled = true;
+}
+
+// Fonction pour gérer la sélection de fichier pour "Activité estudiantine"
+function handleFileSelect(event) {
+  const fileInput = event.target;
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+  const pdfError = document.getElementById('pdfError');
+  const dropZoneText = document.getElementById('dropZoneText');
+  const submitButton = document.querySelector('#serviceForm input[type="submit"]');
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    if (isValidFile(file, 'application/pdf')) {
+      fileNameDisplay.textContent = `Fichier sélectionné : ${file.name}`;
+      dropZoneText.style.display = 'none';
+      pdfError.style.display = 'none';
+      submitButton.disabled = false;
+    } else {
+      fileNameDisplay.textContent = '';
+      dropZoneText.style.display = 'block';
+      pdfError.style.display = 'block';
+      submitButton.disabled = true;
+    }
+  } else {
+    fileNameDisplay.textContent = 'Aucun fichier sélectionné';
+    dropZoneText.style.display = 'block';
+    pdfError.style.display = 'none';
+    submitButton.disabled = true;
+  }
+}
+
+// Fonction pour vérifier si le fichier est valide
+function isValidFile(file, type) {
+  return file.type === type;
+}
+
+// Fonction pour gérer la sélection de fichier pour le rapport complet
+function handleFileSelectRapportComplet(event) {
+  const fileInput = event.target;
+  const fileNameDisplay = document.getElementById('fileNameDisplayRapportComplet');
+  const pdfError = document.getElementById('pdfErrorRapportComplet');
+  const dropZoneText = document.getElementById('dropZoneTextRapportComplet');
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    if (isValidFile(file, 'application/pdf')) {
+      fileNameDisplay.textContent = `Fichier sélectionné : ${file.name}`;
+      dropZoneText.style.display = 'none';
+      pdfError.style.display = 'none';
+    } else {
+      fileNameDisplay.textContent = '';
+      dropZoneText.style.display = 'block';
+      pdfError.style.display = 'block';
+    }
+  } else {
+    fileNameDisplay.textContent = 'Aucun fichier sélectionné';
+    dropZoneText.style.display = 'block';
+    pdfError.style.display = 'none';
+  }
+}
+
+// Fonction pour gérer la sélection de fichier pour la table des matières
+function handleFileSelectTableMatiere(event) {
+  const fileInput = event.target;
+  const fileNameDisplay = document.getElementById('fileNameDisplayTableMatiere');
+  const pdfError = document.getElementById('pdfErrorTableMatiere');
+  const dropZoneText = document.getElementById('dropZoneTextTableMatiere');
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    if (isValidFile(file, 'application/pdf')) {
+      fileNameDisplay.textContent = `Fichier sélectionné : ${file.name}`;
+      dropZoneText.style.display = 'none';
+      pdfError.style.display = 'none';
+    } else {
+      fileNameDisplay.textContent = '';
+      dropZoneText.style.display = 'block';
+      pdfError.style.display = 'block';
+    }
+  } else {
+    fileNameDisplay.textContent = 'Aucun fichier sélectionné';
+    dropZoneText.style.display = 'block';
+    pdfError.style.display = 'none';
+  }
+}
+
+// Fonction pour gérer la sélection de fichier pour la page de garde et résumé
+function handleFileSelectPageGardeResume(event) {
+  const fileInput = event.target;
+  const fileNameDisplay = document.getElementById('fileNameDisplayPageGardeResume');
+  const pdfError = document.getElementById('pdfErrorPageGardeResume');
+  const dropZoneText = document.getElementById('dr3t24NpUrJMNunMMASmhAM953bFGeLXzN7');
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    if (isValidFile(file, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+      fileNameDisplay.textContent = `Fichier sélectionné : ${file.name}`;
+      dropZoneText.style.display = 'none';
+      pdfError.style.display = 'none';
+    } else {
+      fileNameDisplay.textContent = '';
+      dropZoneText.style.display = 'block';
+      pdfError.style.display = 'block';
+    }
+  } else {
+    fileNameDisplay.textContent = 'Aucun fichier sélectionné';
+    dropZoneText.style.display = 'block';
+    pdfError.style.display = 'none';
+  }
+}
+
+// Fonction pour vérifier si le fichier est valide
+function isValidFile(file, type) {
+  return file.type === type;
+}
+
+function submitService() {
+    const typeService = document.getElementById('typeService').value;
+    const fonction = window.formData.fonction;
+
+    // Vérifier si le bouton "Imprimer" a été cliqué uniquement pour les étudiants demandant des matériels
+    if (fonction === 'Étudiant' && typeService === 'Demande de matériels' && !isPrintButtonClicked) {
+        document.getElementById('printErrorMessage').style.display = 'block';
+        return;
+    } else {
+        document.getElementById('printErrorMessage').style.display = 'none';
+    }
+
+    // Vérifier la validité du fichier joint pour "Demande d'activité estudiantine"
+    if (typeService === 'Demande d\'activité estudiantine') {
+        const fileInput = document.getElementById('fichierJoint');
+        const pdfError = document.getElementById('pdfError');
+
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            if (!isValidFile(file, 'application/pdf')) {
+                pdfError.style.display = 'block';
+                return;
+            } else {
+                pdfError.style.display = 'none';
+            }
+        } else {
+            pdfError.style.display = 'block';
+            return;
+        }
+    }
+
+    // Supprimer les lignes vides pour les enseignants et administratifs
+    if (fonction === 'Enseignant' || fonction === 'Administratif') {
+        removeEmptyRows('materielsTableEnseignant');
+    }
+
+    // Désactiver le formulaire
+    disableForm();
+
+    // Afficher le message "En cours..."
+    const loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'block';
+
+    // Masquer les autres messages
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+
+    // Collecter les données du formulaire de service
+    const serviceData = {
+        ...window.formData,
+        typeService: typeService,
+        langueExamen: document.getElementById('langueExamen')?.value,
+        typeCertification: document.getElementById('typeCertification')?.value,
+        exam: document.getElementById('examen')?.value,
+        nomClub: document.getElementById('nomClub').value === 'Autre' ?
+                  document.getElementById('precisezClub').value :
+                  document.getElementById('nomClub').value,
+        sujetDemande: document.getElementById('sujetDemande')?.value,
+        descriptionDetailleActivite: document.getElementById('descriptionDetailleActivite')?.value,
+        natureDemande: document.getElementById('natureDemandeIntervention').value === 'Autre' ?
+                        document.getElementById('precisez').value :
+                        document.getElementById('natureDemandeIntervention').value,
+        lieuImplantation: document.getElementById('lieuImplantation')?.value,
+        descriptionDetailleeIntervention: document.getElementById('descriptionDetailleeIntervention')?.value,
+        deuxiemeEtudiant: document.getElementById('deuxiemeEtudiant')?.value,
+        departementMateriel: document.getElementById('departementMateriels')?.value,
+        typeProjet: document.getElementById('typeProjet').value === 'Autre' ?
+                    document.getElementById('precisezProjet').value :
+                    document.getElementById('typeProjet').value,
+        nomProjet: document.getElementById('nomProjet')?.value,
+        encadreur: document.getElementById('encadreur')?.value,
+        categorie: document.getElementById('categorie')?.value,
+        justification: document.getElementById('justification')?.value,
+        precisezJustification: document.getElementById('precisezJustification')?.value,
+materiels: (() => {
+    const tableId = fonction === 'Étudiant' ?
+                 'materielsTableEtudiant' :
+                 'materielsTableEnseignant';
+    return Array.from(document.querySelectorAll(`#${tableId} tbody tr`)).map(row => {
+        const qte = row.querySelector('input[name="qte[]"]').value;
+        const designation = row.querySelector('input[name="designation[]"]').value;
+        const prix = row.querySelector('input[name="prix[]"]')?.value || '0';
+        return { quantite: qte, designation: designation, prix: prix };
+    });
+})(),
+
+        typeCompte: document.getElementById('typeCompte')?.value,
+        natureDemandeCompte: document.getElementById('natureDemandeCompte')?.value,
+        nomUtilisateur: document.getElementById('nomUtilisateur')?.value,
+        travailEnBinome: document.getElementById('travailEnBinome')?.value,
+        encadrant1: document.getElementById('encadrant1Input')?.value,
+        encadrant2: document.getElementById('encadrant2Input')?.value,
+        encadrant3: document.getElementById('encadrant3Input')?.value,
+        nomSociete: document.getElementById('nomSociete')?.value,
+        langueProjet: document.getElementById('langueProjet')?.value,
+        dateSoutenance: document.getElementById('dateSoutenance')?.value,
+        defenseDate: document.getElementById('defenseDate')?.value,
+        titreProjet: document.getElementById('titreProjet')?.value,
+        projectTitle: document.getElementById('projectTitle')?.value,
+        motsCles: document.getElementById('motsCles')?.value,
+        keywords: document.getElementById('keywords')?.value,
+        encadrants: encadrants,
+        binomeNom: document.getElementById('binomeNom')?.value,
+        binomePrenom: document.getElementById('binomePrenom')?.value,
+        binomeTelephone: document.getElementById('binomeTelephone')?.value,
+        binomeEmail: document.getElementById('binomeEmail')?.value,
+        binomeFormation: document.getElementById('binomeFormation')?.value,
+        binomeNiveau: document.getElementById('binomeNiveau')?.value,
+        binomeFiliere: document.getElementById('binomeFiliere')?.value,
+        binomeNationalite: document.getElementById('binomeNationalite')?.value,
+        binomeCin: document.getElementById('binomeCin')?.value,
+        binomeCodeMinistere: document.getElementById('binomeCodeMinistere')?.value
+    };
+
+    // Gestion des identifiants combinés pour les étudiants et leurs binômes
+    if (typeService === 'Dépôt final – PFE et Thèse') {
+        var identifiantComplet;
+        if (serviceData.nationalite === 'Tunisienne' && serviceData.binomeNationalite === 'Tunisienne') {
+            identifiantComplet = serviceData.cin + '\n' + serviceData.binomeCin;
+        } else if (serviceData.nationalite === 'Étrangère' && serviceData.binomeNationalite === 'Étrangère') {
+            identifiantComplet = serviceData.codeMinistere + '\n' + serviceData.binomeCodeMinistere;
+        } else if (serviceData.nationalite === 'Tunisienne' && serviceData.binomeNationalite === 'Étrangère') {
+            identifiantComplet = serviceData.cin + '\n' + serviceData.binomeCodeMinistere;
+        } else if (serviceData.nationalite === 'Étrangère' && serviceData.binomeNationalite === 'Tunisienne') {
+            identifiantComplet = serviceData.codeMinistere + '\n' + serviceData.binomeCin;
+        }
+        serviceData.identifiantComplet = identifiantComplet;
+    }
+
+    if (typeService === 'Demande d\'activité estudiantine') {
+        const fichierJointInput = document.getElementById('fichierJoint');
+        
+        if (fichierJointInput.files.length > 0) {
+            const file = fichierJointInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                serviceData.fichierJointContenu = event.target.result;
+                serviceData.fichierJointNom = file.name;
+                
+                // Envoyer les données au serveur
+                google.script.run
+                    .withSuccessHandler(onSuccess)
+                    .withFailureHandler(onFailure)
+                    .processFormData(JSON.stringify(serviceData));
+            };
+            reader.readAsDataURL(file);
+            return; // Important : sortir de la fonction
+        }
+    }    
+
+    // Gérer les fichiers joints pour "Dépôt final – PFE et Thèse"
+    if (typeService === 'Dépôt final – PFE et Thèse') {
+        const rapportCompletInput = document.getElementById('rapportComplet');
+        const tableMatiereInput = document.getElementById('tableMatiere');
+        const pageGardeResumeInput = document.getElementById('pageGardeResume');
+
+        if (rapportCompletInput.files.length > 0) {
+            const file = rapportCompletInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                serviceData.rapportComplet = event.target.result;
+                if (tableMatiereInput.files.length > 0) {
+                    const tableMatiereFile = tableMatiereInput.files[0];
+                    const tableMatiereReader = new FileReader();
+                    tableMatiereReader.onload = function(event) {
+                        serviceData.tableMatiere = event.target.result;
+                        if (pageGardeResumeInput.files.length > 0) {
+                            const pageGardeResumeFile = pageGardeResumeInput.files[0];
+                            const pageGardeResumeReader = new FileReader();
+                            pageGardeResumeReader.onload = function(event) {
+                                serviceData.pageGardeResume = event.target.result;
+                                // Envoyer toutes les données au serveur
+                                google.script.run
+                                    .withSuccessHandler(onSuccess)
+                                    .withFailureHandler(onFailure)
+                                    .processFormData(JSON.stringify(serviceData));
+                            };
+                            pageGardeResumeReader.readAsDataURL(pageGardeResumeFile);
+                        } else {
+                            // Envoyer toutes les données au serveur sans le fichier pageGardeResume
+                            google.script.run
+                                .withSuccessHandler(onSuccess)
+                                .withFailureHandler(onFailure)
+                                .processFormData(JSON.stringify(serviceData));
+                        }
+                    };
+                    tableMatiereReader.readAsDataURL(tableMatiereFile);
+                } else {
+                    // Envoyer toutes les données au serveur sans le fichier tableMatiere
+                    google.script.run
+                        .withSuccessHandler(onSuccess)
+                        .withFailureHandler(onFailure)
+                        .processFormData(JSON.stringify(serviceData));
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Envoyer toutes les données au serveur sans le fichier rapportComplet
+            google.script.run
+                .withSuccessHandler(onSuccess)
+                .withFailureHandler(onFailure)
+                .processFormData(JSON.stringify(serviceData));
+        }
+    } else {
+        // Envoyer toutes les données au serveur
+        google.script.run
+            .withSuccessHandler(onSuccess)
+            .withFailureHandler(onFailure)
+            .processFormData(JSON.stringify(serviceData));
+    }
+}
+
+function onSuccess() {
+    // Masquer le message "En cours..."
+    const loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'none';
+
+    // Afficher le message de succès
+    const successMessage = document.getElementById('successMessage');
+    successMessage.style.display = 'block';
+
+    // Réinitialiser le formulaire si nécessaire
+    document.getElementById('serviceForm').reset();
+    resetSpecificFields();
+}
+
+function onFailure(error) {
+    // Masquer le message "En cours..."
+    const loadingMessage = document.getElementById('loadingMessage');
+    loadingMessage.style.display = 'none';
+
+    // Afficher le message d'erreur
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    errorText.textContent = error.message;
+    errorMessage.style.display = 'block';
+
+    // Réactiver le formulaire pour permettre une nouvelle soumission
+    enableForm();
+}
+
+function disableForm() {
+    const form = document.getElementById('serviceForm');
+    const inputs = form.querySelectorAll('input, select, textarea, button');
+    inputs.forEach(input => {
+        input.disabled = true;
+    });
+}
+
+function enableForm() {
+    const form = document.getElementById('serviceForm');
+    const inputs = form.querySelectorAll('input, select, textarea, button');
+    inputs.forEach(input => {
+        input.disabled = false;
+    });
+}
+
+function onSuccess() {
+  // Masquer le message "En cours..."
+  const loadingMessage = document.getElementById('loadingMessage');
+  loadingMessage.style.display = 'none';
+
+  // Afficher le message de succès
+  const successMessage = document.getElementById('successMessage');
+  successMessage.style.display = 'block';
+
+  // Ne pas revenir à la première page
+  // Vous pouvez également réinitialiser le formulaire si nécessaire
+  document.getElementById('serviceForm').reset();
+  resetSpecificFields();
+}
+
+function onFailure(error) {
+  // Masquer le message "En cours..."
+  const loadingMessage = document.getElementById('loadingMessage');
+  loadingMessage.style.display = 'none';
+
+  // Afficher le message d'erreur
+  const errorMessage = document.getElementById('errorMessage');
+  const errorText = document.getElementById('errorText');
+  errorText.textContent = error.message;
+  errorMessage.style.display = 'block';
+
+  // Marquer le formulaire comme invalide
+  isFormValid = false;
+
+  // Ne pas revenir à la première page automatiquement
+  // Vous pouvez également réactiver le formulaire pour permettre une nouvelle soumission
+  enableForm();
+}
+
+      function retourPage() {
+        resetFields(); // Réinitialiser les champs avant de revenir à la première page
+        showPage('mainFormPage');
+      }
+
+function onTypeServiceChange() {
+  resetFields(); // Réinitialiser les champs avant de montrer les nouveaux
+  const typeService = document.getElementById('typeService').value;
+  const fonction = window.formData.fonction;
+  const compteInstitutionnelFields = document.getElementById('compteInstitutionnelFields');
+  const demandeInterventionFields = document.getElementById('demandeInterventionFields');
+  const certificationMicrosoftFields = document.getElementById('certificationMicrosoftFields');
+  const demandeMaterielsEtudiantFields = document.getElementById('demandeMaterielsEtudiantFields');
+  const demandeMaterielsEnseignantFields = document.getElementById('demandeMaterielsEnseignantFields');
+  const demandeActiviteEstudiantineFields = document.getElementById('demandeActiviteEstudiantineFields');
+  const depotFinalPFEFields = document.getElementById('depotFinalPFEFields');
+
+  // Masquer tous les champs
+  compteInstitutionnelFields.style.display = 'none';
+  demandeInterventionFields.style.display = 'none';
+  certificationMicrosoftFields.style.display = 'none';
+  demandeMaterielsEtudiantFields.style.display = 'none';
+  demandeMaterielsEnseignantFields.style.display = 'none';
+  demandeActiviteEstudiantineFields.style.display = 'none';
+  depotFinalPFEFields.style.display = 'none';
+
+  const now = new Date();
+
+  // Afficher les champs en fonction du type de service sélectionné
+  if (typeService === 'Compte institutionnel') {
+    compteInstitutionnelFields.style.display = 'block';
+    updateTypeCompteOptions();
+  } else if (typeService === 'Demande d\'intervention') {
+    demandeInterventionFields.style.display = 'block';
+  } else if (typeService === 'Certification Microsoft') {
+    certificationMicrosoftFields.style.display = 'block';
+    updateTypeCertificationOptions();
+  } else if (typeService === 'Demande de matériels') {
+    if (fonction === 'Étudiant') {
+      demandeMaterielsEtudiantFields.style.display = 'block';
+      resetTable('materielsTableEtudiant'); // Réinitialiser le tableau des matériels pour étudiant
+    } else if (fonction === 'Enseignant' || fonction === 'Administratif') {
+      if (now >= materielsStartDate && now <= materielsEndDate) {
+        // Activer seulement pendant la période
+        demandeMaterielsEnseignantFields.style.display = 'block';
+        resetTable('materielsTableEnseignant');
+      }
+    }
+  } else if (typeService === 'Demande d\'activité estudiantine') {
+    demandeActiviteEstudiantineFields.style.display = 'block';
+    resetFileInput(); // Réinitialiser le champ de fichier joint
+  } else if (typeService === 'Dépôt final – PFE et Thèse') {
+    depotFinalPFEFields.style.display = 'block';
+  }
+
+  // Valider le formulaire après avoir changé le type de service
+  validateServiceForm();
+}
+
+function updateTypeCompteOptions() {
+    const fonction = window.formData.fonction;
+    const typeCompteSelect = document.getElementById('typeCompte');
+    const natureDemandeCompteSelect = document.getElementById('natureDemandeCompte');
+
+    typeCompteSelect.innerHTML = '<option value=""></option>';
+
+    const options = ['Office 365', 'Extranet'];
+    if (fonction === 'Enseignant' || fonction === 'Administratif' || (fonction === 'Étudiant' && window.formData.formation === 'Doctorat en STIC')) {
+        options.push('Gmail professionnel');
+    }
+
+    // Ajouter les options sauf "Extranet"
+    options.filter(option => option !== 'Extranet').forEach(option => {
+        const opt = document.createElement('option');
+        opt.value = option;
+        opt.textContent = option;
+        typeCompteSelect.appendChild(opt);
+    });
+
+    // Ajouter "Extranet" à la fin
+    const extranetOption = document.createElement('option');
+    extranetOption.value = 'Extranet';
+    extranetOption.textContent = 'Extranet';
+    typeCompteSelect.appendChild(extranetOption);
+
+    // Mettre à jour les options de la nature de la demande en fonction du type de compte sélectionné
+typeCompteSelect.addEventListener('change', function() {
+    natureDemandeCompteSelect.innerHTML = '<option value=""></option>';
+    
+    // Supprimer toute description existante
+    const existingDescription = document.getElementById('changerEmailDescription');
+    if (existingDescription) {
+        existingDescription.remove();
+    }
+    
+    if (typeCompteSelect.value === 'Extranet') {
+        const natureOptions = [];
+        if (fonction === 'Enseignant' || fonction === 'Administratif') {
+            natureOptions.push('Nouveau compte');
+        }
+        natureOptions.push('Nom d\'utilisateur oublié', 'Mot de passe oublié', 'Changer e-mail');
+        natureOptions.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            natureDemandeCompteSelect.appendChild(opt);
+        });
+    } else {
+        const natureOptions = ['Nouveau compte', 'Nom d\'utilisateur oublié', 'Mot de passe oublié'];
+        natureOptions.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            natureDemandeCompteSelect.appendChild(opt);
+        });
+    }
+});
+}
+
+function onNatureDemandeCompteChange() {
+  const natureDemande = document.getElementById('natureDemandeCompte').value;
+  const nomUtilisateurDiv = document.getElementById('nomUtilisateurDiv');
+  
+  // Supprimer toute description existante
+  const existingDescription = document.getElementById('changerEmailDescription');
+  if (existingDescription) {
+    existingDescription.remove();
+  }
+
+  if (natureDemande === 'Mot de passe oublié') {
+    nomUtilisateurDiv.style.display = 'block';
+  } else {
+    nomUtilisateurDiv.style.display = 'none';
+  }
+  
+  // Ajouter la description pour "Changer e-mail"
+  if (natureDemande === 'Changer e-mail') {
+    const natureDemandeDiv = document.getElementById('natureDemandeCompte').parentNode;
+    const description = document.createElement('div');
+    description.id = 'changerEmailDescription';
+    description.className = 'option-description';
+    description.innerHTML = '<i class="fas fa-info-circle"></i> Utilisez cette option pour mettre à jour l\'e-mail associé à votre compte Extranet.';
+    natureDemandeDiv.appendChild(description);
+  }
+}
+
+      function onNatureDemandeInterventionChange() {
+        const natureDemande = document.getElementById('natureDemandeIntervention').value;
+        const precisezDiv = document.getElementById('precisezDiv');
+
+        if (natureDemande === 'Autre') {
+          precisezDiv.style.display = 'block';
+        } else {
+          precisezDiv.style.display = 'none';
+        }
+      }
+
+      function updateTypeCertificationOptions() {
+        const fonction = window.formData.fonction;
+        const typeCertificationSelect = document.getElementById('typeCertification');
+
+        typeCertificationSelect.innerHTML = '<option value=""></option>';
+
+        const options = [
+          'Microsoft Certified Fundamentals (MCF)',
+          'Microsoft Office Specialist (MOS)'
+        ];
+        if (fonction === 'Enseignant') {
+          options.push('Microsoft Certified Educator (MCE)');
+        }
+
+        options.forEach(option => {
+          const opt = document.createElement('option');
+          opt.value = option;
+          opt.textContent = option;
+          typeCertificationSelect.appendChild(opt);
+        });
+      }
+
+      function onTypeCertificationChange() {
+        const typeCertification = document.getElementById('typeCertification').value;
+        const examenSelect = document.getElementById('examen');
+
+        examenSelect.innerHTML = '<option value=""></option>';
+
+        if (typeCertification === 'Microsoft Certified Fundamentals (MCF)') {
+          const exams = [
+            'Exam AI-900 : Microsoft Azure AI Fundamentals',
+            'Exam AZ-900 : Microsoft Azure Fundamentals',
+            'Exam DP-900 : Microsoft Azure Data Fundamentals',
+            'Exam PL-900 : Microsoft Power Platform Fundamentals',
+            'Exam SC-900 : Microsoft Security, Compliance, and Identity Fundamentals',
+            'Exam MS-900 : Microsoft 365 Fundamentals',
+            'Exam MB-910 : Microsoft Dynamics 365 Fundamentals (CRM)',
+            'Exam MB-920 : Microsoft Dynamics 365 Fundamentals (ERP)'
+          ];
+          exams.forEach(exam => {
+            const opt = document.createElement('option');
+            opt.value = exam;
+            opt.textContent = exam;
+            examenSelect.appendChild(opt);
+          });
+        } else if (typeCertification === 'Microsoft Office Specialist (MOS)') {
+          const exams = [
+            'Exam MO-100: Microsoft Word (Office 2019)',
+            'Exam MO-200: Microsoft Excel (Office 2019)',
+            'Exam MO-300: Microsoft PowerPoint (Office 2019)',
+            'Exam MO-400: Microsoft Outlook (Office 2019)'
+          ];
+          exams.forEach(exam => {
+            const opt = document.createElement('option');
+            opt.value = exam;
+            opt.textContent = exam;
+            examenSelect.appendChild(opt);
+          });
+        } else if (typeCertification === 'Microsoft Certified Educator (MCE)') {
+          const exams = ['Exam 62-193 : Technology Literacy for Educators'];
+          exams.forEach(exam => {
+            const opt = document.createElement('option');
+            opt.value = exam;
+            opt.textContent = exam;
+            examenSelect.appendChild(opt);
+          });
+        }
+      }
+
+      function onTypeProjetChange() {
+        const typeProjet = document.getElementById('typeProjet').value;
+        const precisezProjetDiv = document.getElementById('precisezProjetDiv');
+
+        if (typeProjet === 'Autre') {
+          precisezProjetDiv.style.display = 'block';
+        } else {
+          precisezProjetDiv.style.display = 'none';
+        }
+      }
+
+      function onNomClubChange() {
+        const nomClub = document.getElementById('nomClub').value;
+        const precisezClubDiv = document.getElementById('precisezClubDiv');
+
+        if (nomClub === 'Autre') {
+          precisezClubDiv.style.display = 'block';
+        } else {
+          precisezClubDiv.style.display = 'none';
+        }
+      }
+
+function addRow(tableId) {
+    const table = document.getElementById(tableId);
+    const tbody = table.getElementsByTagName('tbody')[0];
+    const newRow = tbody.insertRow();
+
+    // Cellule "Qté"
+    const qteCell = newRow.insertCell();
+    qteCell.className = 'qte-col';
+    const qteInput = document.createElement('input');
+    qteInput.type = 'text';
+    qteInput.name = 'qte[]';
+    qteInput.inputMode = 'numeric';
+    qteInput.pattern = '\\d*';
+    qteInput.maxLength = 2;
+    qteInput.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+    });
+    qteCell.appendChild(qteInput);
+
+    // Cellule "Désignation"
+    const designationCell = newRow.insertCell();
+    designationCell.className = 'designation-col';
+    const designationInput = document.createElement('input');
+    designationInput.type = 'text';
+    designationInput.name = 'designation[]';
+    designationCell.appendChild(designationInput);
+
+    // Cellule "Prix (DT)"
+    const prixCell = newRow.insertCell();
+    prixCell.className = 'prix-col';
+    const prixInput = document.createElement('input');
+    prixInput.type = 'text';
+    prixInput.name = 'prix[]';
+    prixInput.inputMode = 'decimal';
+    prixInput.pattern = '[0-9]+([,.][0-9]+)?';
+    prixInput.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9,.]/g, '');
+    });
+    prixCell.appendChild(prixInput);
+}
+
+      function removeRow(button) {
+        const row = button.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      }
+
+function removeEmptyRows(tableId) {
+    const table = document.getElementById(tableId);
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    // Parcourir les lignes à l'envers pour éviter les problèmes d'indexation lors de la suppression
+    for (let i = rows.length - 1; i >= 0; i--) {
+        const qte = rows[i].getElementsByTagName('input')[0].value.trim();
+        const designation = rows[i].getElementsByTagName('input')[1].value.trim();
+
+        // Supprimer la ligne si l'un des champs est vide
+        if (!qte || !designation) {
+            rows[i].remove();
+        }
+    }
+}
+
+  // Fonction pour imprimer la table
+function printTable(tableId) {
+    // Supprimer les lignes vides du tableau avant l'impression
+    const table = document.getElementById(tableId);
+    const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+    // Supprimer les lignes vides ou manquantes
+    for (let i = rows.length - 1; i >= 0; i--) {
+        const inputs = rows[i].getElementsByTagName('input');
+        const quantite = inputs[0].value.trim();
+        const designation = inputs[1].value.trim();
+        if (!quantite || !designation) {
+            rows[i].remove();
+        }
+    }
+
+    // Récupérer les données du formulaire principal depuis la variable globale
+    const formData = window.formData;
+    const materiels = [];
+    for (let row of rows) {
+        const inputs = row.getElementsByTagName('input');
+        materiels.push({
+            quantite: inputs[0].value.trim(),
+            designation: inputs[1].value.trim()
+        });
+    }
+
+    const logoUrl = 'https://i.postimg.cc/TP0mT5vw/logo-face-book.jpg';
+
+    // Créer une image pour vérifier si elle est chargée
+    const img = new Image();
+    img.src = logoUrl;
+    img.onload = function() {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Demande de matériels</title>
+                <style>
+                    body { margin: 20px; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid black; padding: 4px; text-align: center; font-size: 14px; }
+                    th.quantity { width: 60px; }
+                    th.designation { width: 50%; }
+                    th.observations { width: calc(100% - 110px); }
+                    .signature-container { position: fixed; bottom: 20px; left: 20px; right: 20px; }
+                    .signature-table { width: 100%; border-collapse: collapse; }
+                    .signature-table td { width: 33.33%; border: 1px solid black; padding: 8px; }
+                    .signature-table td.signature-cell { height: 100px; text-align: center; vertical-align: top; }
+                    .filiere-departement { display: flex; justify-content: space-between; align-items: center; }
+                    .departement { flex: 1; text-align: center; }
+                    .info-block { margin: 0; padding: 0; }
+                    @page { margin: 20px; }
+                    .page-break { page-break-before: always; }
+                    .content { margin-bottom: 220px; }
+                    .logo { width: 130px; height: 90px; object-fit: contain; display: block; margin: 0 auto; }
+                    .berlin-sans-fb { font-family: "Berlin Sans FB", sans-serif; font-weight: normal; font-size: 16px; }
+                    .berlin-sans-fb-22 { font-family: "Berlin Sans FB", sans-serif; font-weight: normal; font-size: 20px; }
+                    .calibri { font-family: "Calibri", sans-serif; font-weight: normal; }
+                    .date-black { color: black; }
+                    .date-bold { font-weight: bold; }
+                    td.designation { text-align: left; }
+                    .trebuchet-ms { font-family: "Trebuchet MS", sans-serif; }
+                </style>
+            </head>
+            <body>
+        `);
+
+        // En-tête avec logo
+        printWindow.document.write(`
+            <table>
+                <tr>
+                    <th rowspan="2"><img src="${logoUrl}" alt="Logo" class="logo"></th>
+                    <th class="berlin-sans-fb">Processus Gestion de l'Infrastructure et Équipements</th>
+                    <th class="calibri date-black date-bold">GIE-FR-01-00</th>
+                </tr>
+                <tr>
+                    <td class="berlin-sans-fb-22">Demande de matériels</td>
+                    <td rowspan="2" class="calibri date-black date-bold">03/02/2023</td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+        `);
+
+        // Contenu principal
+        printWindow.document.write('<div class="content">');
+
+        // Informations de l'étudiant/enseignant
+        const deuxiemeEtudiant = document.getElementById('deuxiemeEtudiant')?.value;
+        printWindow.document.write(`
+            <p class="info-block">
+                <strong class="trebuchet-ms">Nom et prénom :</strong>
+                <span class="calibri">${formData.nom} ${formData.prenom}${deuxiemeEtudiant ? ' & ' + deuxiemeEtudiant : ''}</span>
+            </p>
+        `);
+
+        // Informations filière/département
+        printWindow.document.write(`
+            <div class="filiere-departement info-block">
+                <p class="filiere">
+                    <strong class="trebuchet-ms">Filière :</strong>
+                    <span class="calibri">${formData.fonction === 'Étudiant' ?
+                    (formData.niveau + ' ' + formData.filiere) : ''}</span>
+                </p>
+                <p class="departement">
+                    <strong class="trebuchet-ms">Département :</strong>
+                    <span class="calibri">${formData.fonction === 'Étudiant' ?
+                    document.getElementById('departementMateriels').value :
+                    formData.departement}</span>
+                </p>
+            </div>
+        `);
+
+        // Informations projet/encadreur
+        if (formData.fonction === 'Étudiant') {
+            const typeProjet = document.getElementById('typeProjet').value;
+            const precisezProjet = document.getElementById('precisezProjet').value;
+            const typeProjetDisplay = typeProjet === 'Autre' ? precisezProjet : typeProjet;
+
+            printWindow.document.write(`
+                <p class="info-block">
+                    <strong class="trebuchet-ms">Type de projet :</strong>
+                    <span class="calibri">${typeProjetDisplay}</span>
+                </p>
+                <p>
+                    <strong class="trebuchet-ms">Nom du projet :</strong>
+                    <span class="calibri">${document.getElementById('nomProjet').value}</span>
+                </p>
+                <p>
+                    <strong class="trebuchet-ms">Encadreur :</strong>
+                    <span class="calibri">${document.getElementById('encadreur').value}</span>
+                </p>
+            `);
+        }
+
+        // Tableau des matériels
+        printWindow.document.write(`
+            <table>
+                <tr>
+                    <th class="quantity trebuchet-ms">Qté</th>
+                    <th class="designation trebuchet-ms">Désignation</th>
+                    <th class="observations trebuchet-ms">Observations</th>
+                </tr>
+        `);
+
+        const pageHeight = 900;
+        let currentHeight = 200;
+        const rowHeight = 30;
+        const signatureHeight = 220;
+        const maxContentHeight = pageHeight - signatureHeight;
+        materiels.forEach((materiel, index) => {
+            if (currentHeight + rowHeight > maxContentHeight) {
+                printWindow.document.write(`
+                    </table>
+                    <div class="page-break"></div>
+                    <table>
+                        <tr>
+                            <th class="quantity trebuchet-ms">Qté</th>
+                            <th class="designation trebuchet-ms">Désignation</th>
+                            <th class="observations trebuchet-ms">Observations</th>
+                        </tr>
+                `);
+                currentHeight = rowHeight;
+            }
+            printWindow.document.write(`
+                <tr>
+                    <td class="calibri">${materiel.quantite}</td>
+                    <td class="designation calibri">${materiel.designation}</td>
+                    <td class="calibri"></td>
+                </tr>
+            `);
+            currentHeight += rowHeight;
+        });
+
+        printWindow.document.write('</table></div>');
+
+        // Signatures
+        printWindow.document.write(`
+            <div class="signature-container">
+                <table class="signature-table">
+                    <tr>
+                        <td style="text-align: left;"><strong class="trebuchet-ms">Date :</strong></td>
+                        <td style="text-align: left;"><strong class="trebuchet-ms">Date :</strong></td>
+                        <td style="text-align: left;"><strong class="trebuchet-ms">Date :</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="signature-cell calibri">Signature de l'encadreur</td>
+                        <td class="signature-cell calibri">Signature et cachet du chef de département</td>
+                        <td class="signature-cell calibri">Signature du chef de service</td>
+                    </tr>
+                </table>
+            </div>
+        `);
+
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+
+        // Désactiver tous les éléments interactifs de la page après l'impression
+        const allInputs = document.querySelectorAll('input, select, textarea, button');
+        allInputs.forEach(input => {
+            if (input.type !== 'submit') {
+                input.disabled = true;
+            }
+        });
+
+        // Désactiver les boutons "Ajouter une ligne" et "Imprimer" après l'impression
+        const addRowButton = document.querySelector(`button[onclick="addRow('${tableId}')"]`);
+        const printButton = document.querySelector(`button[onclick="printTable('${tableId}')"]`);
+        if (addRowButton) addRowButton.disabled = true;
+        if (printButton) printButton.disabled = true;
+
+        // Masquer le message d'erreur d'impression après l'impression
+        const printErrorMessage = document.getElementById('printErrorMessage');
+        printErrorMessage.style.display = 'none';
+
+        // Mettre à jour la variable lorsque le bouton "Imprimer" est cliqué
+        isPrintButtonClicked = true;
+    };
+}
+
+      function resetSpecificFields() {
+        document.getElementById('cinDiv').style.display = 'none';
+        document.getElementById('codeMinistereDiv').style.display = 'none';
+        document.getElementById('etudiantFields').style.display = 'none';
+        document.getElementById('enseignantFields').style.display = 'none';
+        document.getElementById('compteInstitutionnelFields').style.display = 'none';
+        document.getElementById('demandeInterventionFields').style.display = 'none';
+        document.getElementById('certificationMicrosoftFields').style.display = 'none';
+        document.getElementById('demandeMaterielsEtudiantFields').style.display = 'none';
+        document.getElementById('demandeMaterielsEnseignantFields').style.display = 'none';
+        document.getElementById('demandeActiviteEstudiantineFields').style.display = 'none';
+        document.getElementById('precisezDiv').style.display = 'none';
+        document.getElementById('precisezClubDiv').style.display = 'none';
+        document.getElementById('precisezProjetDiv').style.display = 'none';
+        document.getElementById('nomUtilisateurDiv').style.display = 'none';
+      }
+
+function disableForm() {
+  const form = document.getElementById('serviceForm');
+  const inputs = form.querySelectorAll('input, select, textarea, button');
+  inputs.forEach(input => {
+    input.disabled = true;
+  });
+}
+
+function enableForm() {
+  const form = document.getElementById('serviceForm');
+  const inputs = form.querySelectorAll('input, select, textarea, button');
+  inputs.forEach(input => {
+    input.disabled = false;
+  });
+}
+      // Initialiser la première page au chargement
+    window.onload = function() {
+      google.script.run.withSuccessHandler(function(isActive) {
+        isCertificationMicrosoftActive = isActive;
+        showPage('mainFormPage');
+      }).updateCertificationMicrosoftOption();
+    };
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fields = ['nom', 'prenom', 'deuxiemeEtadient', 'encadreur', 'binomeNom', 'binomePrenom','encadrant1Input', 'encadrant2Input', 'encadrant3Input'];
+    const numericFields = ['cin', 'telephone']; // Liste des champs numériques
+    const codeMinistereInput = document.getElementById('codeMinistere');
+    const emailInput = document.getElementById('email');
+    const codeMinistereError = document.getElementById('codeMinistereError');
+    const emailError = document.getElementById('emailError');
+    const nomUtilisateurInput = document.getElementById('nomUtilisateur');
+    const nomUtilisateurError = document.getElementById('nomUtilisateurError');
+
+    document.getElementById('nationalite').addEventListener('change', onNationaliteChange);
+    document.getElementById('fonction').addEventListener('change', onFonctionChange);
+    document.querySelectorAll('input, select').forEach(element => {
+    element.addEventListener('input', validateForm);
+
+  const serviceFormFields = document.querySelectorAll('#serviceForm input, #serviceForm select, #serviceForm textarea');
+  serviceFormFields.forEach(field => {
+    field.addEventListener('input', validateServiceForm);
+    field.addEventListener('change', validateServiceForm);
+    });
+});
+
+    // Fonctions pour la mise en forme des champs de texte
+    function capitalizeFirstLetterOnly(event) {
+        var input = event.target;
+        var value = input.value;
+
+        // Supprimer les espaces au début
+        value = value.trimStart();
+
+        // Convertir la première lettre de chaque mot en majuscule et le reste en minuscule
+        value = value.replace(/\b\w/g, function(l){ return l.toUpperCase() })
+                    .replace(/\B\w/g, function(l){ return l.toLowerCase() });
+
+        // Mettre à jour la valeur de l'input
+        input.value = value;
+    }
+
+    function allowOnlyLetters(event) {
+        var charCode = event.which || event.keyCode;
+        if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32) {
+            event.preventDefault();
+        }
+    }
+
+    function removeTrailingSpace(event) {
+        var input = event.target;
+        var value = input.value;
+
+        // Supprimer l'espace à la fin de la chaîne
+        value = value.trimEnd();
+
+        // Mettre à jour la valeur de l'input
+        input.value = value;
+    }
+
+// Fonction pour empêcher la saisie de plusieurs espaces successifs
+function preventMultipleSpaces(event) {
+    var input = event.target;
+    var value = input.value;
+
+    // Remplacer plusieurs espaces par un seul
+    if (event.inputType === 'insertText' && event.data === ' ') {
+        if (value.slice(-1) === ' ') {
+            event.preventDefault();
+        }
+    }
+}
+
+    // Fonctions pour la validation des champs spécifiques
+    function validateInput(input, errorMessage, pattern) {
+        input.addEventListener('input', function() {
+            // Supprimer tous les caractères non conformes au pattern
+            input.value = input.value.replace(pattern, '');
+            if (input.value.length === 8) {
+                errorMessage.style.display = 'none';
+            }
+        });
+
+        input.addEventListener('blur', function() {
+            if (input.value.length < 8) {
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        });
+
+        input.addEventListener('keypress', function(event) {
+            const charCode = event.which || event.keyCode;
+            if (pattern.test(String.fromCharCode(charCode))) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    function validateCodeMinistereInput(input, errorMessage) {
+        input.addEventListener('input', function() {
+            // Convertir les minuscules en majuscules et supprimer les caractères non autorisés
+            input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (input.value.length === 8) {
+                errorMessage.style.display = 'none';
+            }
+        });
+
+        input.addEventListener('blur', function() {
+            if (input.value.length < 8) {
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        });
+
+        input.addEventListener('keypress', function(event) {
+            const charCode = event.which || event.keyCode;
+            // Autoriser les lettres (majuscules et minuscules) et les chiffres
+            if ((charCode < 48 || charCode > 57) && (charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 8) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    function validateNameInput(input) {
+        input.addEventListener('input', function() {
+            // Supprimer tous les caractères non alphabétiques
+            input.value = input.value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
+        });
+
+        input.addEventListener('keypress', function(event) {
+            const charCode = event.which || event.keyCode;
+            // Autoriser les lettres (majuscules et minuscules) et l'espace
+            if ((charCode < 65 || charCode > 90) && (charCode < 97 || charCode > 122) && charCode !== 32 && charCode !== 8) {
+                event.preventDefault();
+            }
+        });
+    }
+
+    // Validation de l'e-mail
+    function validateEmail() {
+        if (emailInput.validity.typeMismatch || emailInput.value.trim() === '') {
+            emailError.style.display = 'block';
+        } else {
+            emailError.style.display = 'none';
+        }
+    }
+
+    if (emailInput) {
+        emailInput.addEventListener('input', function(event) {
+            // Convertir toutes les lettres en minuscules
+            emailInput.value = emailInput.value.toLowerCase();
+
+            // Empêcher la saisie de l'espace
+            if (event.inputType === 'insertText' && event.data === ' ') {
+                emailInput.value = emailInput.value.replace(/\s+/g, '');
+            }
+
+            // Masquer le message d'erreur si le champ devient valide
+            if (!emailInput.validity.typeMismatch && emailInput.value.trim() !== '') {
+                emailError.style.display = 'none';
+            }
+        });
+
+        emailInput.addEventListener('blur', validateEmail);
+    }
+
+    // Appliquer les événements aux champs de texte
+    fields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', capitalizeFirstLetterOnly);
+            field.addEventListener('keypress', allowOnlyLetters);
+            field.addEventListener('blur', removeTrailingSpace);
+            field.addEventListener('beforeinput', preventMultipleSpaces);
+            validateNameInput(field);
+        }
+    });
+
+    // Appliquer les événements aux champs numériques
+    numericFields.forEach(function(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorMessage = document.getElementById(fieldId + 'Error');
+        if (field && errorMessage) {
+            validateInput(field, errorMessage, /\D/g);
+        }
+    });
+
+    // Validation pour le champ Code Ministère (alphanumérique uniquement, convertir en majuscules)
+    if (codeMinistereInput) {
+        validateCodeMinistereInput(codeMinistereInput, codeMinistereError);
+    }
+
+    // Fonction pour gérer la saisie du nom d'utilisateur
+    function handleNomUtilisateurInput(event) {
+        const typeCompte = document.getElementById('typeCompte').value;
+        const input = event.target;
+        const domain = typeCompte === 'Office 365' ? 'enetcom.u-sfax.tn' : 'enetcom.usf.tn';
+
+        // Empêcher la saisie de l'espace et convertir en minuscules
+        input.value = input.value.replace(/\s+/g, '').toLowerCase();
+
+        // Vérifier le domaine en temps réel
+        if (input.value.includes('@')) {
+            const [username, userDomain] = input.value.split('@');
+            if (userDomain === domain) {
+                nomUtilisateurError.style.display = 'none';
+            }
+        }
+    }
+
+    function handleExtranetNomUtilisateurInput(event) {
+        const input = event.target;
+        // Empêcher la saisie de l'espace
+        input.value = input.value.replace(/\s+/g, '');
+    }
+
+    // Fonction pour valider le nom d'utilisateur lorsque le champ perd le focus
+function validateNomUtilisateur() {
+  const typeCompte = document.getElementById('typeCompte').value;
+  const input = document.getElementById('nomUtilisateur');
+  const domain = typeCompte === 'Office 365' ? 'enetcom.u-sfax.tn' : 'enetcom.usf.tn';
+  const submitButton = document.querySelector('#serviceForm input[type="submit"]');
+
+  // Vérifier le domaine
+  if (input.value.includes('@')) {
+    const [username, userDomain] = input.value.split('@');
+    if (userDomain === domain) {
+      nomUtilisateurError.style.display = 'none';
+      submitButton.disabled = false; // Activer le bouton "Soumettre"
+    } else {
+      nomUtilisateurError.style.display = 'block';
+      submitButton.disabled = true; // Désactiver le bouton "Soumettre"
+    }
+  } else {
+    nomUtilisateurError.style.display = 'block';
+    submitButton.disabled = true; // Désactiver le bouton "Soumettre"
+  }
+}
+
+    // Ajouter un gestionnaire d'événements pour le champ "Type de compte" pour activer/désactiver la fonctionnalité
+    function onTypeCompteChange() {
+        resetTypeCompteFields();
+        
+        const typeCompte = document.getElementById('typeCompte').value;
+        const nomUtilisateurInput = document.getElementById('nomUtilisateur');
+
+        // Supprimer les anciens gestionnaires d'événements
+        nomUtilisateurInput.removeEventListener('input', handleNomUtilisateurInput);
+        nomUtilisateurInput.removeEventListener('input', handleExtranetNomUtilisateurInput);
+        nomUtilisateurInput.removeEventListener('blur', validateNomUtilisateur);
+
+        // Ajouter les nouveaux gestionnaires d'événements en fonction du type de compte
+        if (typeCompte === 'Office 365' || typeCompte === 'Gmail professionnel') {
+            nomUtilisateurInput.addEventListener('input', handleNomUtilisateurInput);
+            nomUtilisateurInput.addEventListener('blur', validateNomUtilisateur);
+        } else if (typeCompte === 'Extranet') {
+            nomUtilisateurInput.addEventListener('input', handleExtranetNomUtilisateurInput);
+        }
+    }
+
+    // Ajouter le gestionnaire d'événements pour le champ "Type de compte"
+    const typeCompteSelect = document.getElementById('typeCompte');
+    if (typeCompteSelect) {
+        typeCompteSelect.addEventListener('change', onTypeCompteChange);
+    }
+});
+
+function resetFields() {
+  // Réinitialiser les champs spécifiques ici
+  document.getElementById('compteInstitutionnelFields').style.display = 'none';
+  document.getElementById('demandeInterventionFields').style.display = 'none';
+  document.getElementById('certificationMicrosoftFields').style.display = 'none';
+  document.getElementById('demandeMaterielsEtudiantFields').style.display = 'none';
+  document.getElementById('demandeMaterielsEnseignantFields').style.display = 'none';
+  document.getElementById('demandeActiviteEstudiantineFields').style.display = 'none';
+  document.getElementById('nomUtilisateurDiv').style.display = 'none';
+  document.getElementById('precisezDiv').style.display = 'none';
+  document.getElementById('precisezClubDiv').style.display = 'none';
+  document.getElementById('precisezProjetDiv').style.display = 'none';
+  document.getElementById('encadrant1Div').style.display = 'none';
+  document.getElementById('encadrant2Div').style.display = 'none';
+  document.getElementById('encadrant3Div').style.display = 'none';
+
+  // Vider les champs de texte
+  const textFields = document.querySelectorAll('#compteInstitutionnelFields input[type="text"], #demandeInterventionFields input[type="text"], #certificationMicrosoftFields input[type="text"], #demandeMaterielsEtudiantFields input[type="text"], #demandeMaterielsEnseignantFields input[type="text"], #demandeActiviteEstudiantineFields input[type="text"], #compteInstitutionnelFields textarea, #demandeInterventionFields textarea, #certificationMicrosoftFields textarea, #demandeMaterielsEtudiantFields textarea, #demandeMaterielsEnseignantFields textarea, #demandeActiviteEstudiantineFields textarea');
+  textFields.forEach(field => field.value = '');
+
+  // Réinitialiser les sélections
+  const selectFields = document.querySelectorAll('#compteInstitutionnelFields select, #demandeInterventionFields select, #certificationMicrosoftFields select, #demandeMaterielsEtudiantFields select, #demandeMaterielsEnseignantFields select, #demandeActiviteEstudiantineFields select');
+  selectFields.forEach(field => field.selectedIndex = 0);
+
+  // Réinitialiser les messages d'erreur
+  const errorMessages = document.querySelectorAll('.error-message');
+  errorMessages.forEach(error => error.style.display = 'none');
+}
+
+function resetNationaliteFields() {
+    // Réinitialiser les champs associés à la nationalité
+    document.getElementById('cin').value = '';
+    document.getElementById('codeMinistere').value = '';
+    document.getElementById('cinDiv').style.display = 'none';
+    document.getElementById('codeMinistereDiv').style.display = 'none';
+    document.getElementById('cinError').style.display = 'none';
+    document.getElementById('codeMinistereError').style.display = 'none';
+}
+
+function resetFonctionFields() {
+    // Réinitialiser les champs associés à la fonction
+    document.getElementById('etudiantFields').style.display = 'none';
+    document.getElementById('enseignantFields').style.display = 'none';
+    document.getElementById('formation').selectedIndex = 0;
+    document.getElementById('niveau').selectedIndex = 0;
+    document.getElementById('filiere').selectedIndex = 0;
+    document.getElementById('departement').selectedIndex = 0;
+    document.getElementById('grade').selectedIndex = 0;
+}
+
+// Fonction pour réinitialiser les champs associés au type de compte
+function resetTypeCompteFields() {
+    const natureDemandeCompteSelect = document.getElementById('natureDemandeCompte');
+    const nomUtilisateurDiv = document.getElementById('nomUtilisateurDiv');
+    const nomUtilisateurInput = document.getElementById('nomUtilisateur');
+    const nomUtilisateurError = document.getElementById('nomUtilisateurError');
+
+    // Réinitialiser la sélection de la nature de la demande
+    natureDemandeCompteSelect.selectedIndex = 0;
+
+    // Masquer et réinitialiser le champ du nom d'utilisateur
+    nomUtilisateurDiv.style.display = 'none';
+    nomUtilisateurInput.value = '';
+
+    // Masquer le message d'erreur du nom d'utilisateur
+    nomUtilisateurError.style.display = 'none';
+}
+
+function validateForm() {
+    const nationalite = document.getElementById('nationalite').value;
+    const fonction = document.getElementById('fonction').value;
+    const cin = document.getElementById('cin').value;
+    const codeMinistere = document.getElementById('codeMinistere').value;
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const telephone = document.getElementById('telephone').value;
+    const email = document.getElementById('email').value;
+    const formation = document.getElementById('formation').value;
+    const niveau = document.getElementById('niveau').value;
+    const filiere = document.getElementById('filiere').value;
+    const departement = document.getElementById('departement').value;
+    const grade = document.getElementById('grade').value;
+
+    let isValid = true;
+
+    if (!nationalite) {
+        isValid = false;
+    }
+    if (nationalite === 'Tunisienne' && cin.length !== 8) {
+        isValid = false;
+    }
+    if (nationalite === 'Étrangère' && codeMinistere.length !== 8) {
+        isValid = false;
+    }
+    if (!nom || !prenom || telephone.length !== 8 || !email) {
+        isValid = false;
+    }
+    if (fonction === '') {
+        isValid = false;
+    }
+    if (fonction === 'Étudiant' && (!formation || !niveau || !filiere)) {
+        isValid = false;
+    }
+    if (fonction === 'Enseignant' && (!departement || !grade)) {
+        isValid = false;
+    }
+    if (fonction === 'Administratif' && !email.includes('@enetcom.usf.tn')) {
+        document.getElementById('emailDomainError').style.display = 'block';
+        isValid = false;
+    } else {
+        document.getElementById('emailDomainError').style.display = 'none';
+    }
+
+    document.querySelector('input[type="submit"]').disabled = !isValid;
+}
+
+function validateServiceForm() {
+    const typeService = document.getElementById('typeService').value;
+    let isValid = true;
+
+    // Validation en fonction du type de service sélectionné
+    if (typeService === 'Compte institutionnel') {
+        const typeCompte = document.getElementById('typeCompte').value;
+        const natureDemandeCompte = document.getElementById('natureDemandeCompte').value;
+        const nomUtilisateur = document.getElementById('nomUtilisateur').value;
+
+        if (!typeCompte || !natureDemandeCompte) {
+            isValid = false;
+        }
+        if (natureDemandeCompte === 'Mot de passe oublié' && !nomUtilisateur) {
+            isValid = false;
+        }
+    } else if (typeService === 'Demande d\'intervention') {
+        const natureDemandeIntervention = document.getElementById('natureDemandeIntervention').value;
+        const lieuImplantation = document.getElementById('lieuImplantation').value;
+        const descriptionDetailleeIntervention = document.getElementById('descriptionDetailleeIntervention').value;
+
+        if (!natureDemandeIntervention || !lieuImplantation || !descriptionDetailleeIntervention) {
+            isValid = false;
+        }
+        if (natureDemandeIntervention === 'Autre' && !document.getElementById('precisez').value) {
+            isValid = false;
+        }
+    } else if (typeService === 'Certification Microsoft') {
+        const langueExamen = document.getElementById('langueExamen').value;
+        const typeCertification = document.getElementById('typeCertification').value;
+        const examen = document.getElementById('examen').value;
+
+        if (!langueExamen || !typeCertification || !examen) {
+            isValid = false;
+        }
+    } else if (typeService === 'Demande de matériels') {
+    const fonction = window.formData.fonction;
+    const tableId = fonction === 'Étudiant' ? 'materielsTableEtudiant' : 'materielsTableEnseignant';
+    const materielsRows = document.querySelectorAll(`#${tableId} tbody tr`);
+    let hasFilledRow = false;
+
+    // Vérifier si au moins une ligne du tableau est remplie
+    materielsRows.forEach(row => {
+        const qte = row.querySelector('input[name="qte[]"]').value.trim();
+        const designation = row.querySelector('input[name="designation[]"]').value.trim();
+        const prix = (fonction === 'Enseignant' || fonction === 'Administratif') ? row.querySelector('input[name="prix[]"]').value.trim() : null;
+
+        // Pour les enseignants/administratifs, vérifier aussi le prix
+        if (fonction === 'Enseignant' || fonction === 'Administratif') {
+            if (qte !== '' && designation !== '' && prix !== '') {
+                hasFilledRow = true;
+            }
+        } else {
+            if (qte !== '' && designation !== '') {
+                hasFilledRow = true;
+            }
+        }
+    });
+
+    if (!hasFilledRow) {
+        isValid = false;
+    }
+
+    // Validation spécifique pour les étudiants
+    if (fonction === 'Étudiant') {
+        const departementMateriels = document.getElementById('departementMateriels').value;
+        const typeProjet = document.getElementById('typeProjet').value;
+        const nomProjet = document.getElementById('nomProjet').value;
+        const encadreur = document.getElementById('encadreur').value;
+
+        if (!departementMateriels || !typeProjet || !nomProjet || !encadreur) {
+            isValid = false;
+        }
+
+        if (typeProjet === 'Autre' && !document.getElementById('precisezProjet').value) {
+            isValid = false;
+        }
+    }
+    // Validation spécifique pour les enseignants/administratifs
+    else if (fonction === 'Enseignant' || fonction === 'Administratif') {
+        const categorie = document.getElementById('categorie').value;
+        const justification = document.getElementById('justification').value;
+
+        // Vérifier si la catégorie et la justification sont remplies
+        if (!categorie || !justification) {
+            isValid = false;
+        }
+
+        // Si la justification est "Autre", vérifier si le champ "Précisez" est rempli
+        if (justification === 'Autre' && !document.getElementById('precisezJustification').value) {
+            isValid = false;
+        }
+    }
+} else if (typeService === 'Demande d\'activité estudiantine') {
+        const nomClub = document.getElementById('nomClub').value;
+        const sujetDemande = document.getElementById('sujetDemande').value;
+        const descriptionDetailleActivite = document.getElementById('descriptionDetailleActivite').value;
+
+        if (!nomClub || !sujetDemande || !descriptionDetailleActivite) {
+            isValid = false;
+        }
+        if (nomClub === 'Autre' && !document.getElementById('precisezClub').value) {
+            isValid = false;
+        }
+    } else if (typeService === 'Dépôt final – PFE et Thèse') {
+        const travailEnBinome = document.getElementById('travailEnBinome').value;
+        const langueProjet = document.getElementById('langueProjet').value;
+        const nomSociete = document.getElementById('nomSociete').value;
+        const nombreEncadrants = document.getElementById('nombreEncadrants').value;
+        const encadrant1 = document.getElementById('encadrant1Input').value;
+
+        if (!travailEnBinome || !langueProjet || !nomSociete || !nombreEncadrants || !encadrant1) {
+            isValid = false;
+        }
+
+        // Vérification des champs spécifiques à la langue du projet
+        if (langueProjet === 'Français') {
+            const dateSoutenance = document.getElementById('dateSoutenance').value;
+            const titreProjet = document.getElementById('titreProjet').value;
+            const motsCles = document.getElementById('motsCles').value;
+
+            if (!dateSoutenance || !titreProjet || !motsCles) {
+                isValid = false;
+            }
+        } else if (langueProjet === 'Anglais') {
+            const defenseDate = document.getElementById('defenseDate').value;
+            const projectTitle = document.getElementById('projectTitle').value;
+            const keywords = document.getElementById('keywords').value;
+
+            if (!defenseDate || !projectTitle || !keywords) {
+                isValid = false;
+            }
+        }
+
+        // Vérification des fichiers joints
+        const rapportCompletInput = document.getElementById('rapportComplet');
+        const tableMatiereInput = document.getElementById('tableMatiere');
+        const pageGardeResumeInput = document.getElementById('pageGardeResume');
+
+        if (rapportCompletInput.files.length === 0 || tableMatiereInput.files.length === 0 || pageGardeResumeInput.files.length === 0) {
+            isValid = false;
+        }
+
+        // Vérification des sous-champs de "Travail en binôme"
+        if (travailEnBinome === 'Oui') {
+            const binomeNom = document.getElementById('binomeNom').value;
+            const binomePrenom = document.getElementById('binomePrenom').value;
+            const binomeTelephone = document.getElementById('binomeTelephone').value;
+            const binomeEmail = document.getElementById('binomeEmail').value;
+            const binomeFormation = document.getElementById('binomeFormation').value;
+            const binomeNiveau = document.getElementById('binomeNiveau').value;
+            const binomeFiliere = document.getElementById('binomeFiliere').value;
+            const binomeNationalite = document.getElementById('binomeNationalite').value;
+            const binomeCin = document.getElementById('binomeCin').value;
+            const binomeCodeMinistere = document.getElementById('binomeCodeMinistere').value;
+
+            if (!binomeNom || !binomePrenom || !binomeTelephone || !binomeEmail || !binomeFormation || !binomeNiveau || !binomeFiliere || !binomeNationalite || (!binomeCin && !binomeCodeMinistere)) {
+                isValid = false;
+            }
+        }
+    }
+
+    // Activer ou désactiver le bouton "Soumettre" en fonction de la validation
+    const submitButton = document.querySelector('#serviceForm input[type="submit"]');
+    submitButton.disabled = !isValid;
+}
+
+function onJustificationChange() {
+    const justification = document.getElementById('justification').value;
+    const precisezJustificationDiv = document.getElementById('precisezJustificationDiv');
+
+    if (justification === 'Autre') {
+        precisezJustificationDiv.style.display = 'block';
+    } else {
+        precisezJustificationDiv.style.display = 'none';
+    }
+}
+
+    </script>
+<style>
+    :root {
+        --bg-primary: #F0F4F8;
+        --bg-secondary: #FFFFFF;
+        --text-primary: #1A365D;
+        --text-secondary: #2D3748;
+        --accent-color: #4299E1;
+        --accent-hover: #3182CE;
+        --border-color: #A0AEC0;
+        --main-title-color: #8b69c2;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+  color: var(--text-primary);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.modern-title {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 25px 40px;
+    margin-bottom: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+    max-width: 600px; /* Nouvelle valeur pour correspondre au formulaire */
+    width: 100%;
+    text-align: center;
+}
+
+.modern-title h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin: 0 0 20px 0; /* Ajout d'un espace en bas */
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.modern-title .subtitle {
+    font-size: 0.9rem;
+    color: white;;
+    margin-top: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.modern-title .decorative-icon {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: rgba(102, 126, 234, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+.container {
+  position: relative;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2);
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-top: 0;
+}
+
+h2 {
+    font-family: 'Corbel', sans-serif;
+    text-align: center;
+    margin: 20px 0 30px 0;
+    color: var(--text-primary);
+    font-weight: 800;
+    font-size: 1.7rem;
+    letter-spacing: -1px;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}
+
+    .form-group {
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+p {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+/* Style pour les champs de texte */
+input, select, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: rgba(237, 242, 247, 0.8);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover, input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+    button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: all 0.5s ease;
+    }
+
+    button:hover::before {
+        left: 100%;
+    }
+
+    button:hover {
+        background: #89939c;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(66, 153, 225, 0.4);
+    }
+
+    #message, #loginMessage {
+        margin-top: 20px;
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+@media (max-width: 480px) {
+    .container {
+        margin: 20px 10px;
+        padding: 25px 20px;
+    }
+    
+    .modern-title {
+        margin: 10px;
+        padding: 20px 25px;
+    }
+    
+    .modern-title h1 {
+        font-size: 1.4rem;
+    }
+}
+
+    .login-form-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .login-form-group input {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .login-form-group button {
+        width: auto;
+        margin-top: 0;
+    }
+
+    .main-title {
+        font-family: 'Arial', sans-serif;
+        font-size: 1.25rem;
+        color: var(--main-title-color);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .logout-button {
+        margin-top: 20px;
+        background: linear-gradient(to right, #f2b3b3 0%, #cc6060 100%);
+    }
+
+    .logout-button:hover {
+        background: linear-gradient(to right, #E53E3E 0%, #C53030 100%);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+    }
+
+    .custom-textarea {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: space-between; /* Espacement entre les boutons */
+        gap: 1rem; /* Espacement entre les boutons */
+    }
+
+    .btn-container .btn {
+        flex: 1; /* Permet aux boutons de prendre la même largeur */
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        gap: 0.5rem;
+    }
+
+    .btn-secondary {
+        background: var(--secondary);
+        color: var(--white);
+    }
+
+    .btn-secondary:hover {
+        background: var(--secondary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-small {
+        font-size: 0.8rem; /* Réduisez la taille de la police selon vos besoins */
+        padding: 0.5rem 1rem; /* Réduisez la taille du bouton */
+    }
+.btn-precedent {
+    background: linear-gradient(135deg, #636470 0%, #484b69 100%) !important; /* Rouge clair à rouge foncé */
+    color: white !important;
+}
+
+.btn-precedent:hover {
+    background: linear-gradient(135deg, #484b69 0%, #323661 100%) !important; /* Rouge plus foncé au survol */
+    transform: translateY(-3px) !important;
+    box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4) !important;
+}
+
+    .qte-col {
+        width: 15%;
+    }
+
+    .designation-col {
+        width: 60%;
+        padding-left: 5px;
+    }
+
+.qte-col input,
+.prix-col input {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+    .designation-col input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    tbody .action-col {
+        padding-left: 10px;
+    }
+
+    .custom-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .custom-table thead {
+        background-color: #4A5568; /* Nouvelle couleur de fond pour l'en-tête */
+        border-radius: 8px; /* Arrondir les coins */
+        overflow: hidden; /* Assurer que les coins arrondis sont visibles */
+    }
+
+    .custom-table th, .custom-table td {
+        padding: 8px;
+        text-align: center;
+    }
+
+    .custom-table th {
+        background-color: #4A5568; /* Nouvelle couleur de fond pour les cellules d'en-tête */
+        color: white; /* Couleur du texte */
+        font-weight: normal; /* Texte non gras */
+        font-family: 'Arial', sans-serif; /* Nouvelle police */
+    }
+
+    .custom-table th:first-child {
+        border-top-left-radius: 8px; /* Arrondir le coin supérieur gauche */
+    }
+
+    .custom-table th:last-child {
+        border-top-right-radius: 8px; /* Arrondir le coin supérieur droit */
+    }
+
+.error-message,
+.success-message,
+.loading-message {
+  border-radius: 8px;
+  padding: 15px;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+  margin-bottom: 20px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  min-height: 50px; /* Hauteur minimale fixe */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  margin-top: 10px;
+}
+
+.loading-message {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+      input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  background-color: #f0f0f0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.notification {
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #f8f9fa;
+    color: #495057;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.notification i {
+    margin-right: 5px;
+    color: #4299E1;
+}
+
+/* Style pour les zones de dépôt de fichiers */
+.file-upload-container {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: rgba(249, 249, 249, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+.file-upload-container:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(240, 242, 245, 0.8);
+}
+
+.file-upload-icon {
+  font-size: 48px;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.file-upload-text {
+  font-size: 16px;
+  color: var(--text-color);
+  margin-bottom: 10px;
+}
+
+.file-upload-hint {
+  font-size: 14px;
+  color: var(--light-text);
+}
+
+/* Style pour le champ de fichier masqué */
+.file-upload-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Style pour le nom du fichier sélectionné */
+.file-selected {
+  margin-top: 15px;
+  font-size: 14px;
+  color: var(--primary-color);
+  word-break: break-all;
+}
+
+    /* Style pour les labels des champs obligatoires */
+.required-label::after {
+    content: " *";
+    color: #e53e3e; /* Couleur rouge */
+    font-size: 1.2em;
+}
+
+.prix-col {
+    width: 15%;
+    padding-left: 5px;
+}
+
+.prix-col input {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Style pour la description de l'option "Changer e-mail" */
+.option-description {
+    background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
+    border: 1px solid #3182ce;
+    border-left: 4px solid #4299e1;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #2b6cb0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(66, 153, 225, 0.1);
+}
+
+.option-description i {
+    color: #4299e1;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+</style>
+  </head>
+<body>
+  <!-- Titre principal déplacé en dehors du conteneur -->
+  <div class="modern-title">
+  <h1>Gestion des demandes des parties prenantes de l'ENET'Com</h1>
+  <div class="subtitle">Système de demandes en ligne</div>
+</div>
+
+  <!-- Conteneur du formulaire -->
+  <div id="mainFormPage" class="container">
+    <p style="color: #e53e3e; font-size: 14px; margin-bottom: 20px;">(*) Champ obligatoire</p>
+    <!-- Contenu du formulaire -->
+    <form id="mainForm" onsubmit="event.preventDefault(); submitForm();">
+        <div class="form-group">
+          <label for="nationalite" class="required-label">Nationalité</label>
+          <select id="nationalite" name="nationalite" onchange="onNationaliteChange()">
+            <option value=""></option>
+            <option value="Tunisienne">Tunisienne</option>
+            <option value="Étrangère">Étrangère</option>
+          </select>
+        </div>
+
+<div id="cinDiv" style="display:none" class="form-group">
+    <label for="cin" class="required-label">Carte d'identité nationale</label>
+    <input type="text" id="cin" name="cin" maxlength="8" pattern="\d{8}" inputmode="numeric">
+    <div id="cinError" class="error-message" style="display: none;">Veuillez saisir exactement 8 chiffres.</div>
+</div>
+
+<div id="codeMinistereDiv" style="display:none" class="form-group">
+    <label for="codeMinistere" class="required-label">Code ministère</label>
+    <input type="text" id="codeMinistere" name="codeMinistere" maxlength="8" pattern="[A-Z0-9]{8}" inputmode="text">
+    <div id="codeMinistereError" class="error-message" style="display: none;">Veuillez saisir exactement 8 caractères.</div>
+</div>
+
+<div class="form-group">
+    <label for="nom" class="required-label">Nom</label>
+    <input type="text" id="nom" name="nom" inputmode="text">
+</div>
+
+<div class="form-group">
+    <label for="prenom" class="required-label">Prénom</label>
+    <input type="text" id="prenom" name="prenom" inputmode="text">
+</div>
+
+<div class="form-group">
+    <label for="telephone" class="required-label">Téléphone</label>
+    <input type="tel" id="telephone" name="telephone" maxlength="8" pattern="\d{8}" inputmode="numeric">
+    <div id="telephoneError" class="error-message" style="display: none;">Veuillez saisir exactement 8 chiffres.</div>
+</div>
+
+<div class="form-group">
+  <label for="email" class="required-label">E-mail personnel</label>
+  <input type="email" id="email" name="email">
+  <div id="emailError" class="error-message" style="display: none;">Veuillez respecter le format requis.</div>
+  <div id="emailDomainError" class="error-message" style="display: none;">
+    Veuillez utiliser votre adresse e-mail académique.
+    </div>
+</div>
+
+        <div class="form-group">
+          <label for="fonction" class="required-label">Fonction</label>
+          <select id="fonction" name="fonction" onchange="onFonctionChange()">
+            <option value=""></option>
+            <option value="Étudiant">Étudiant</option>
+            <option value="Enseignant">Enseignant</option>
+            <option value="Administratif">Administratif</option>
+          </select>
+        </div>
+
+<div id="loginForm" style="display:none;" class="form-group">
+  <label for="password" class="required-label">Mot de passe</label>
+  <input type="password" id="password" name="password">
+  <div class="btn-container">
+    <button type="button" onclick="validatePassword()">Se connecter</button>
+    <button type="button" onclick="sendResetPasswordEmail()">Demande accès</button>
+  </div>
+  <div id="loginMessage" class="error-message" style="display: none;">Mot de passe incorrect.</div>
+</div>
+
+<div id="emailSentMessage" class="success-message" style="display: none;">
+  Votre demande a bien été envoyée. Vous recevrez un e-mail sous peu.
+</div>
+<div id="nomErrorMessage" class="error-message" style="display: none;">
+  Veuillez entrer votre nom.
+</div>
+
+<div id="prenomErrorMessage" class="error-message" style="display: none;">
+  Veuillez entrer votre prénom.
+</div>
+
+<div id="telephoneErrorMessage" class="error-message" style="display: none;">
+  Veuillez entrer votre numéro de téléphone.
+</div>
+
+<div id="emailRequiredMessage" class="error-message" style="display: none;">
+  Veuillez entrer votre adresse e-mail.
+</div>
+
+        <div id="etudiantFields" style="display:none">
+          <div class="form-group">
+            <label for="formation" class="required-label">Formation</label>
+            <select id="formation" name="formation" onchange="onFormationChange()">
+              <option value=""></option>
+              <option value="Ingénieur">Ingénieur</option>
+              <option value="Licence Unifiée">Licence Unifiée</option>
+              <option value="Mastère">Mastère</option>
+              <option value="Doctorat en STIC">Doctorat en STIC</option>
+            </select>
+          </div>
+
+<div class="form-group">
+    <label for="niveau" class="required-label">Niveau</label>
+    <select id="niveau" name="niveau">
+        <option value=""></option>
+    </select>
+</div>
+
+          <div class="form-group">
+            <label for="filiere" class="required-label">Filière</label>
+            <select id="filiere" name="filiere">
+              <option value=""></option>
+            </select>
+          </div>
+        </div>
+
+        <div id="enseignantFields" style="display:none">
+          <div class="form-group">
+            <label for="departement" class="required-label">Département</label>
+            <select id="departement" name="departement">
+              <option value=""></option>
+              <option value="Mathématique et Informatique Décisionnelle">Mathématique et Informatique Décisionnelle</option>
+              <option value="Télécommunication">Télécommunication</option>
+              <option value="Informatique Industrielle">Informatique Industrielle</option>
+              <option value="Electronique">Electronique</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="grade" class="required-label">Grade</label>
+            <select id="grade" name="grade">
+              <option value=""></option>
+              <option value="Professeur">Professeur</option>
+              <option value="Maître de conférence">Maître de conférence</option>
+              <option value="Maître assistant">Maître assistant</option>
+              <option value="Assistant">Assistant</option>
+              <option value="PES">PES</option>
+              <option value="Détaché de l'enseignement secondaire">Détaché de l'enseignement secondaire</option>
+              <option value="Contractuel">Contractuel</option>
+              <option value="Expert">Expert</option>
+              <option value="Vacataire">Vacataire</option>
+            </select>
+          </div>
+        </div>
+
+<div style="margin-top: 20px;"><br>
+  <input type="submit" value="Suivant" class="button" disabled>
+</div>
+<div style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+  <br><br><br>
+  <hr>
+  © 2025 <a href="https://enetcom.rnu.tn/" target="_blank" style="color: #4299E1; text-decoration: none;">ENET'Com</a> – Développé par Walid CHARMI
+</div>
+</form>
+</div>
+
+    <div id="servicePage" style="display:none;" class="container">
+      <!-- Ajouter le message sous le titre principal -->
+      <p style="color: #e53e3e; font-size: 14px; margin-bottom: 20px;">(*) Champ obligatoire</p>
+      <!-- Formulaire de service -->
+      <form id="serviceForm" onsubmit="event.preventDefault(); submitService();">
+      <div class="form-group">
+        <label for="typeService" class="required-label">Type de service</label>
+        <select id="typeService" name="typeService" onchange="onTypeServiceChange()">
+          <option value=""></option>
+        </select>
+      </div>
+
+        <!-- Champs pour "Compte institutionnel" -->
+        <div id="compteInstitutionnelFields" style="display:none;">
+          <div class="form-group">
+            <label for="typeCompte" class="required-label">Type de compte</label>
+            <select id="typeCompte" name="typeCompte" onchange="onTypeCompteChange()">
+              <option value=""></option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="natureDemandeCompte" class="required-label">Nature de la demande</label>
+            <select id="natureDemandeCompte" name="natureDemandeCompte" onchange="onNatureDemandeCompteChange()">
+              <option value=""></option>
+              <option value="Nouveau compte">Nouveau compte</option>
+              <option value="Nom d'utilisateur oublié">Nom d'utilisateur oublié</option>
+              <option value="Mot de passe oublié">Mot de passe oublié</option>
+            </select>
+          </div>
+<div id="nomUtilisateurDiv" style="display:none;" class="form-group">
+  <label for="nomUtilisateur" class="required-label">Nom d'utilisateur</label>
+  <input type="text" id="nomUtilisateur" name="nomUtilisateur" oninput="handleNomUtilisateurInput(event)" onblur="validateNomUtilisateur()">
+  <div id="nomUtilisateurError" class="error-message" style="display: none;">Veuillez respecter le format requis.</div>
+</div>
+  </div>
+
+        <!-- Champs pour "Demande d'intervention" -->
+        <div id="demandeInterventionFields" style="display:none;">
+          <div class="form-group">
+            <label for="natureDemandeIntervention" class="required-label">Nature de la demande</label>
+            <select id="natureDemandeIntervention" name="natureDemandeIntervention" onchange="onNatureDemandeInterventionChange()">
+              <option value=""></option>
+              <option value="Bâtiment">Bâtiment</option>
+              <option value="Équipement">Équipement</option>
+              <option value="Logiciel">Logiciel</option>
+              <option value="Réseau">Réseau</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+          <div id="precisezDiv" style="display:none;" class="form-group">
+            <label for="precisez" class="required-label">Précisez</label>
+            <input type="text" id="precisez" name="precisez">
+          </div>
+          <div class="form-group">
+            <label for="lieuImplantation" class="required-label">Lieu d'implantation</label>
+            <input type="text" id="lieuImplantation" name="lieuImplantation">
+          </div>
+          <div class="form-group">
+            <label for="descriptionDetailleeIntervention" class="required-label">Description détaillée</label>
+            <textarea id="descriptionDetailleeIntervention" name="descriptionDetailleeIntervention"></textarea>
+          </div>
+        </div>
+
+        <!-- Champs pour "Certification Microsoft" -->
+        <div id="certificationMicrosoftFields" style="display:none;">
+          <div class="form-group">
+            <label for="langueExamen" class="required-label">Langue de l'examen</label>
+            <select id="langueExamen" name="langueExamen">
+              <option value=""></option>
+              <option value="Français">Français</option>
+              <option value="Anglais">Anglais</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="typeCertification" class="required-label">Type de certification</label>
+            <select id="typeCertification" name="typeCertification" onchange="onTypeCertificationChange()">
+              <option value=""></option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="examen" class="required-label">Examen</label>
+            <select id="examen" name="examen">
+              <option value=""></option>
+            </select>
+          </div>
+        </div>
+
+<!-- Champs pour "Demande de matériels" pour Étudiant -->
+<div id="demandeMaterielsEtudiantFields" style="display:none;">
+    <div class="form-group">
+        <label for="deuxiemeEtudiant">Nom complet du binôme</label>
+        <input type="text" id="deuxiemeEtudiant" name="deuxiemeEtudiant" inputmode="text">
+    </div>
+    <div class="form-group">
+        <label for="departementMateriels" class="required-label">Département</label>
+        <select id="departementMateriels" name="departementMateriels">
+            <option value=""></option>
+            <option value="Mathématique et Informatique Décisionnelle">Mathématique et Informatique Décisionnelle</option>
+            <option value="Télécommunication">Télécommunication</option>
+            <option value="Informatique Industrielle">Informatique Industrielle</option>
+            <option value="Electronique">Electronique</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="typeProjet" class="required-label">Type de projet</label>
+        <select id="typeProjet" name="typeProjet" onchange="onTypeProjetChange()">
+            <option value=""></option>
+            <option value="PFE (Projet Fin d'Études)">PFE (Projet Fin d'Études)</option>
+            <option value="SFE (Stage Fin d'Études)">SFE (Stage Fin d'Études)</option>
+            <option value="PFA (Projet Fin d'Années)">PFA (Projet Fin d'Années)</option>
+            <option value="MP (Mini Projet)">MP (Mini Projet)</option>
+            <option value="Autre">Autre</option>
+        </select>
+    </div>
+    <div id="precisezProjetDiv" style="display:none;" class="form-group">
+        <label for="precisezProjet" class="required-label">Précisez</label>
+        <input type="text" id="precisezProjet" name="precisezProjet">
+    </div>
+    <div class="form-group">
+        <label for="nomProjet" class="required-label">Nom du projet</label>
+        <input type="text" id="nomProjet" name="nomProjet">
+    </div>
+    <div class="form-group">
+        <label for="encadreur" class="required-label">Encadreur</label>
+        <input type="text" id="encadreur" name="encadreur" inputmode="text">
+    </div>
+    <div class="form-group">
+        <label for="materielsDemandesEtudiant" class="required-label">Matériels demandés</label>
+        <table id="materielsTableEtudiant" class="custom-table">
+            <thead>
+                <tr>
+                    <th class="qte-col">Qté</th>
+                    <th class="designation-col">Désignation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="qte-col"><input type="text" name="qte[]" inputmode="numeric" pattern="\d{1,2}" maxlength="2" oninput="this.value = this.value.replace(/\D/g, '')"></td>
+                    <td class="designation-col"><input type="text" name="designation[]"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="btn-container">
+            <button type="button" onclick="addRow('materielsTableEtudiant')" class="btn btn-secondary btn-small">Ajouter une ligne</button>
+            <button type="button" onclick="printTable('materielsTableEtudiant')" class="btn btn-secondary btn-small" disabled>Imprimer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Champs pour "Demande de matériels" pour Enseignant et Administratif -->
+<div id="demandeMaterielsEnseignantFields" style="display:none;">
+
+  <div class="form-group">
+    <label for="categorie" class="required-label">Catégorie</label>
+    <select id="categorie" name="categorie">
+        <option value=""></option>
+        <option value="Consommables">Consommables</option>
+        <option value="Matériels">Matériels</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="justification" class="required-label">Justification du besoin</label>
+    <select id="justification" name="justification" onchange="onJustificationChange()">
+        <option value=""></option>
+        <option value="PFE (Projet Fin d'Études)">PFE (Projet Fin d'Études)</option>
+        <option value="SFE (Stage Fin d'Études)">SFE (Stage Fin d'Études)</option>
+        <option value="PFA (Projet Fin d'Années)">PFA (Projet Fin d'Années)</option>
+        <option value="MP (Mini Projet)">MP (Mini Projet)</option>
+        <option value="Autre">Autre</option>
+    </select>
+</div>
+
+<!-- Champ "Précisez" masqué par défaut -->
+<div id="precisezJustificationDiv" style="display:none;" class="form-group">
+    <label for="precisezJustification" class="required-label">Précisez</label>
+    <input type="text" id="precisezJustification" name="precisezJustification">
+</div>
+
+  <div class="form-group">
+    <label for="materielsDemandesEnseignant" class="required-label">Matériels demandés</label>
+<table id="materielsTableEnseignant" class="custom-table">
+  <thead>
+    <tr>
+      <th class="qte-col">Qté</th>
+      <th class="designation-col">Désignation</th>
+      <th class="prix-col">Prix (DT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="qte-col"><input type="text" name="qte[]" inputmode="numeric" pattern="\d{1,2}" maxlength="2" oninput="this.value = this.value.replace(/\D/g, '')"></td>
+      <td class="designation-col"><input type="text" name="designation[]"></td>
+      <td class="prix-col"><input type="text" name="prix[]" inputmode="decimal" pattern="[0-9]+([,.][0-9]+)?" oninput="this.value = this.value.replace(/[^0-9,.]/g, '')"></td>
+    </tr>
+  </tbody>
+</table>
+
+    <div class="btn-container">
+      <button type="button" onclick="addRow('materielsTableEnseignant')" class="btn btn-secondary btn-small">Ajouter une ligne</button>
+    </div>
+  </div>
+</div>
+
+<!-- Champs pour "Dépôt final – PFE et Thèse" -->
+<div id="depotFinalPFEFields" style="display:none;">
+  <div class="form-group">
+    <label for="travailEnBinome" class="required-label">Travail en binôme</label>
+    <select id="travailEnBinome" name="travailEnBinome">
+      <option value=""></option>
+      <option value="Oui">Oui</option>
+      <option value="Non">Non</option>
+    </select>
+  </div>
+
+<!-- Conteneur pour les champs supplémentaires de binôme -->
+<div id="binomeFields" style="display:none;">
+    <div class="form-group">
+        <label for="binomeNationalite" class="required-label">Nationalité (Binôme)</label>
+        <select id="binomeNationalite" name="binomeNationalite" onchange="onBinomeNationaliteChange()">
+            <option value=""></option>
+            <option value="Tunisienne">Tunisienne</option>
+            <option value="Étrangère">Étrangère</option>
+        </select>
+    </div>
+
+    <div id="binomeCinDiv" style="display:none" class="form-group">
+        <label for="binomeCin" class="required-label">Carte d'identité nationale (Binôme)</label>
+        <input type="text" id="binomeCin" name="binomeCin" maxlength="8" pattern="\d{8}" inputmode="numeric">
+        <div id="binomeCinError" class="error-message" style="display: none;">Veuillez saisir exactement 8 chiffres.</div>
+    </div>
+
+    <div id="binomeCodeMinistereDiv" style="display:none" class="form-group">
+        <label for="binomeCodeMinistere" class="required-label">Code ministère (Binôme)</label>
+        <input type="text" id="binomeCodeMinistere" name="binomeCodeMinistere" maxlength="8" pattern="[A-Z0-9]{8}" inputmode="text">
+        <div id="binomeCodeMinistereError" class="error-message" style="display: none;">Veuillez saisir exactement 8 caractères.</div>
+    </div>
+
+    <div class="form-group">
+        <label for="binomeNom" class="required-label">Nom (Binôme)</label>
+        <input type="text" id="binomeNom" name="binomeNom" inputmode="text">
+    </div>
+
+    <div class="form-group">
+        <label for="binomePrenom" class="required-label">Prénom (Binôme)</label>
+        <input type="text" id="binomePrenom" name="binomePrenom" inputmode="text">
+    </div>
+
+    <div class="form-group">
+        <label for="binomeTelephone" class="required-label">Téléphone (Binôme)</label>
+        <input type="tel" id="binomeTelephone" name="binomeTelephone" maxlength="8" pattern="\d{8}" inputmode="numeric">
+        <div id="binomeTelephoneError" class="error-message" style="display: none;">Veuillez saisir exactement 8 chiffres.</div>
+    </div>
+
+    <div class="form-group">
+        <label for="binomeEmail" class="required-label">E-mail personnel (Binôme)</label>
+        <input type="email" id="binomeEmail" name="binomeEmail">
+        <div id="binomeEmailError" class="error-message" style="display: none;">Veuillez respecter le format requis.</div>
+    </div>
+
+    <div class="form-group">
+        <label for="binomeFormation" class="required-label">Formation (Binôme)</label>
+        <select id="binomeFormation" name="binomeFormation" onchange="onBinomeFormationChange()">
+            <option value=""></option>
+            <option value="Ingénieur">Ingénieur</option>
+            <option value="Licence Unifiée">Licence Unifiée</option>
+            <option value="Mastère">Mastère</option>
+            <option value="Doctorat en STIC">Doctorat en STIC</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="binomeNiveau" class="required-label">Niveau (Binôme)</label>
+        <select id="binomeNiveau" name="binomeNiveau">
+            <option value=""></option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="binomeFiliere" class="required-label">Filière (Binôme)</label>
+        <select id="binomeFiliere" name="binomeFiliere">
+            <option value=""></option>
+        </select>
+    </div>
+</div>
+
+  <div class="form-group">
+    <label for="nombreEncadrants" class="required-label">Nombre d'encadrants</label>
+    <select id="nombreEncadrants" name="nombreEncadrants" onchange="onNombreEncadrantsChange()">
+      <option value=""></option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+  </div>
+<div id="encadrantNotification" class="notification" style="display: none;">
+    <i class="fas fa-info-circle"></i> Cette partie concerne uniquement les encadrants de l'ENET'Com.
+    <i class="fas fa-info-circle"></i> Assurez-vous que le nom figure dans la liste. Sinon, saisissez-le manuellement.
+</div>
+
+<div id="encadrant1Div" style="display:none;" class="form-group">
+    <label for="encadrant1">Encadrant 1</label>
+    <input type="text" id="encadrant1Input" name="encadrant1Input" oninput="filterEncadrantList('encadrant1Input', 'encadrant1List')">
+    <select id="encadrant1List" name="encadrant1" size="5" style="display:none;" onchange="selectEncadrant('encadrant1Input', 'encadrant1List')">
+        <!-- Les options seront ajoutées dynamiquement par JavaScript -->
+    </select>
+</div>
+
+<div id="encadrant2Div" style="display:none;" class="form-group">
+    <label for="encadrant2">Encadrant 2</label>
+    <input type="text" id="encadrant2Input" name="encadrant2Input" oninput="filterEncadrantList('encadrant2Input', 'encadrant2List')">
+    <select id="encadrant2List" name="encadrant2" size="5" style="display:none;" onchange="selectEncadrant('encadrant2Input', 'encadrant2List')">
+        <!-- Les options seront ajoutées dynamiquement par JavaScript -->
+    </select>
+</div>
+
+<div id="encadrant3Div" style="display:none;" class="form-group">
+    <label for="encadrant3">Encadrant 3</label>
+    <input type="text" id="encadrant3Input" name="encadrant3Input" oninput="filterEncadrantList('encadrant3Input', 'encadrant3List')">
+    <select id="encadrant3List" name="encadrant3" size="5" style="display:none;" onchange="selectEncadrant('encadrant3Input', 'encadrant3List')">
+        <!-- Les options seront ajoutées dynamiquement par JavaScript -->
+    </select>
+</div>
+
+  <!-- Nouveau champ pour "Nom de la société" -->
+  <div class="form-group">
+    <label for="nomSociete" class="required-label">Nom de la société</label>
+    <input type="text" id="nomSociete" name="nomSociete">
+  </div>
+
+<!-- Champ pour "Langue du projet" -->
+<div class="form-group">
+    <label for="langueProjet" class="required-label">Langue du projet</label>
+    <select id="langueProjet" name="langueProjet" onchange="onLangueProjetChange()">
+        <option value=""></option>
+        <option value="Français">Français</option>
+        <option value="Anglais">Anglais</option>
+    </select>
+</div>
+
+<!-- Champs pour le français -->
+<div id="champsFrancais" style="display:none;">
+    <div class="form-group">
+        <label for="dateSoutenance" class="required-label">Date de soutenance</label>
+        <input type="date" id="dateSoutenance" name="dateSoutenance">
+    </div>
+    <div class="form-group">
+        <label for="titreProjet" class="required-label">Titre du projet</label>
+        <input type="text" id="titreProjet" name="titreProjet">
+    </div>
+    <div class="form-group">
+        <label for="motsCles" class="required-label">Mots-clés</label>
+        <textarea id="motsCles" name="motsCles" placeholder="Entrez les mots-clés, en les séparant par une virgule"></textarea>
+    </div>
+</div>
+
+<!-- Champs pour l'anglais -->
+<div id="champsAnglais" style="display:none;">
+    <div class="form-group">
+        <label for="defenseDate" class="required-label">Defense Date</label>
+        <input type="date" id="defenseDate" name="defenseDate">
+    </div>
+    <div class="form-group">
+        <label for="projectTitle" class="required-label">Project Title</label>
+        <input type="text" id="projectTitle" name="projectTitle">
+    </div>
+    <div class="form-group">
+        <label for="keywords" class="required-label">Keywords</label>
+        <textarea id="keywords" name="keywords" placeholder="Enter the keywords, separated by commas"></textarea>
+    </div>
+</div>
+
+  <!-- Nouveau champ pour le rapport complet en PDF -->
+  <div class="form-group">
+    <label for="rapportComplet" class="required-label">Rapport complet en PDF</label>
+    <div class="file-upload-container">
+      <i class="fas fa-file-pdf file-upload-icon"></i>
+      <div id="dropZoneTextRapportComplet" class="file-upload-text">
+        Glisser-déposer un fichier PDF ici ou cliquer pour parcourir
+      </div>
+      <div class="file-upload-hint" id="fileNameDisplayRapportComplet">Aucun fichier sélectionné</div>
+      <input type="file" id="rapportComplet" name="rapportComplet" class="file-upload-input" accept=".pdf" onchange="handleFileSelectRapportComplet(event)">
+    </div>
+    <div id="pdfErrorRapportComplet" class="error-message" style="display: none;">Veuillez joindre un fichier PDF.</div>
+  </div>
+
+  <!-- Nouveau champ pour la table des matières en PDF -->
+  <div class="form-group">
+    <label for="tableMatiere" class="required-label">Table des matières en PDF</label>
+    <div class="file-upload-container">
+      <i class="fas fa-file-pdf file-upload-icon"></i>
+      <div id="dropZoneTextTableMatiere" class="file-upload-text">
+        Glisser-déposer un fichier PDF ici ou cliquer pour parcourir
+      </div>
+      <div class="file-upload-hint" id="fileNameDisplayTableMatiere">Aucun fichier sélectionné</div>
+      <input type="file" id="tableMatiere" name="tableMatiere" class="file-upload-input" accept=".pdf" onchange="handleFileSelectTableMatiere(event)">
+    </div>
+    <div id="pdfErrorTableMatiere" class="error-message" style="display: none;">Veuillez joindre un fichier PDF.</div>
+  </div>
+
+  <!-- Nouveau champ pour la page de garde et résumé en Word -->
+  <div class="form-group">
+    <label for="pageGardeResume" class="required-label">Page de garde et résumé en Word</label>
+    <div class="file-upload-container">
+      <i class="fas fa-file-word file-upload-icon"></i>
+      <div id="dr3t24NpUrJMNunMMASmhAM953bFGeLXzN7" class="file-upload-text">
+        Glisser-déposer un fichier Word ici ou cliquer pour parcourir
+      </div>
+      <div class="file-upload-hint" id="fileNameDisplayPageGardeResume">Aucun fichier sélectionné</div>
+      <input type="file" id="pageGardeResume" name="pageGardeResume" class="file-upload-input" accept=".doc,.docx" onchange="handleFileSelectPageGardeResume(event)">
+    </div>
+    <div id="pdfErrorPageGardeResume" class="error-message" style="display: none;">Veuillez joindre un fichier Word.</div>
+  </div>
+</div>
+
+    <!-- Champs pour "Demande d'activité estudiantine" -->
+    <div id="demandeActiviteEstudiantineFields" style="display:none;">
+      <div class="form-group">
+        <label for="nomClub" class="required-label">Nom du club</label>
+        <select id="nomClub" name="nomClub" onchange="onNomClubChange()">
+          <option value=""></option>
+          <option value="Junior">Junior</option>
+          <option value="TPL">TPL</option>
+          <option value="MTC">MTC</option>
+          <option value="Tunsa">Tunsa</option>
+          <option value="IEEE">IEEE</option>
+          <option value="Enactus">Enactus</option>
+          <option value="Robotique">Robotique</option>
+          <option value="GDSC">GDSC</option>
+          <option value="Orbeats">Orbeats</option>
+          <option value="Aéromodélisme">Aéromodélisme</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+      <div id="precisezClubDiv" style="display:none;" class="form-group">
+        <label for="precisezClub" class="required-label">Précisez</label>
+        <input type="text" id="precisezClub" name="precisezClub">
+      </div>
+      <div class="form-group">
+        <label for="sujetDemande" class="required-label">Sujet de la demande</label>
+        <input type="text" id="sujetDemande" name="sujetDemande">
+      </div>
+      <div class="form-group">
+        <label for="descriptionDetailleActivite" class="required-label">Description détaillée</label>
+        <textarea id="descriptionDetailleActivite" name="descriptionDetailleActivite"></textarea>
+      </div>
+<div class="form-group">
+  <label for="fichierJoint">Joindre un PDF, si disponible</label>
+  <div class="file-upload-container">
+    <i class="fas fa-file-pdf file-upload-icon"></i>
+
+    <!-- ✅ Ajout d’un id pour pouvoir le masquer -->
+    <div id="dropZoneText" class="file-upload-text">
+      Glisser-déposer un fichier PDF ici ou cliquer pour parcourir
+    </div>
+
+    <!-- ✅ Ce texte s'affichera par défaut -->
+    <div class="file-upload-hint" id="fileNameDisplay">Aucun fichier sélectionné</div>
+
+    <input type="file"
+           id="fichierJoint"
+           name="fichierJoint"
+           class="file-upload-input"
+           accept=".pdf"
+           onchange="handleFileSelect(event)"
+           onclick="disableSubmitButton()">
+  </div>
+
+  <div id="pdfError" class="error-message" style="display: none;">Veuillez joindre un fichier PDF.</div>
+</div>
+
+    </div>
+
+<!-- Messages de succès, d'erreur et de chargement -->
+<div id="successMessage" class="success-message" style="display: none;">
+  Votre demande a été enregistrée avec succès.
+</div>
+<div id="errorMessage" class="error-message" style="display: none;">
+  Une erreur est survenue : <span id="errorText"></span>
+</div>
+<div id="loadingMessage" class="loading-message" style="display: none;">
+  Envoi en cours...
+</div>
+<div id="printErrorMessage" class="error-message" style="display: none;">
+  Veuillez imprimer la demande avant de soumettre.
+</div>
+
+<!-- Boutons de soumission et de retour -->
+<div style="margin-top: 20px;">
+  <button type="button" class="btn-precedent" onclick="retourPage()">Précédent</button>
+  <input type="submit" value="Soumettre">
+</div>
+<div style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+  <br><br><br>
+  <hr>
+  © 2025 <a href="https://enetcom.rnu.tn/" target="_blank" style="color: #4299E1; text-decoration: none;">ENET'Com</a> – Développé par Walid CHARMI
+</div>
+</form>
+</div>
